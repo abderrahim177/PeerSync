@@ -1,49 +1,79 @@
 <?php
 
 class User {
+
     private int $id;
     private string $name;
     private string $email;
-    private int $password;
+    private string $password;
     private string $role;
 
-    public function __construct($id , $name , $email , $password , $role)
+    public function __construct(
+        int $id,
+        string $name,
+        string $email,
+        string $password,
+        string $role
+    )
     {
         $this->id = $id;
         $this->name = $name;
-        $this->email =$email;
+        $this->email = $email;
         $this->password = $password;
         $this->role = $role;
     }
 
-    public function getId($id){
+    // GETTERS
+
+    public function getId(): int
+    {
         return $this->id;
     }
-    public function getName($name){
+
+    public function getName(): string
+    {
         return $this->name;
     }
-    public function getEmail($email){
+
+    public function getEmail(): string
+    {
         return $this->email;
     }
-    public function getPassword($password){
+
+    public function getPassword(): string
+    {
         return $this->password;
     }
-    public function getRole($role){
+
+    public function getRole(): string
+    {
         return $this->role;
     }
-    public function setId($id){
-        return $this->id;
+
+    // SETTERS
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
-    public function setName($name){
-        return $this->name;
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
-    public function setEmail($email){
-        return $this->email;
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
     }
-    public function setPassword($password){
-        return $this->password;
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
-    public function setRole($role){
-        return $this->role;
+
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
     }
 }
