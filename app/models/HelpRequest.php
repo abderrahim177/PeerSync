@@ -17,6 +17,16 @@ class HelpRequest {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
+
+        // validation status
+        if (!in_array($status, [
+            Status::PENDING,
+            Status::ASSIGNED,
+            Status::RESOLVED
+        ])) {
+            throw new Exception("Invalid status");
+        }
+
         $this->status = $status;
     }
 
@@ -44,11 +54,6 @@ class HelpRequest {
 
     // SETTERS
 
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
     public function setTitle(string $title): void
     {
         $this->title = $title;
@@ -61,6 +66,26 @@ class HelpRequest {
 
     public function setStatus(string $status): void
     {
+        if (!in_array($status, [
+            Status::PENDING,
+            Status::ASSIGNED,
+            Status::RESOLVED
+        ])) {
+            throw new Exception("Invalid status");
+        }
+
         $this->status = $status;
+    }
+
+    // BUSINESS METHODS
+
+    public function assign(): void
+    {
+        $this->status = Status::ASSIGNED;
+    }
+
+    public function resolve(): void
+    {
+        $this->status = Status::RESOLVED;
     }
 }
