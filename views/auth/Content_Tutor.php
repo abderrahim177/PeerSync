@@ -1,9 +1,9 @@
 <?php
 // Fetch only pending requests for the tutor space
 
-    require_once __DIR__ . '/login-process.php';
-    $name = $_SESSION['user_name'];
-    $role = $_SESSION['user_role'];
+require_once __DIR__ . '/login-process.php';
+$name = $_SESSION['user_name'];
+$role = $_SESSION['user_role'];
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -23,10 +23,36 @@ $helpRepo = new HelpRequestRepository($dbConnection);
 $technologies = $helpRepo->getAllTechnologies();
 $requests     = $helpRepo->getAllRequests();
 $stats        = $helpRepo->getRequestStats();
-$pendingRequests = array_filter($requests, function($r) {
+$pendingRequests = array_filter($requests, function ($r) {
     return strtoupper($r['status']) === 'PENDING';
 });
 
+function timeAgo($timestamp) {
+    if (!$timestamp) return "Unknown time";
+
+    $time_ago = strtotime($timestamp);
+    $current_time = time();
+    $time_difference = $current_time - $time_ago;
+    
+    if ($time_difference < 1) { return 'just now'; }
+    $condition = array(
+        12 * 30 * 24 * 60 * 60  =>  'year',
+        30 * 24 * 60 * 60       =>  'month',
+        7 * 24 * 60 * 60        =>  'week',
+        24 * 60 * 60            =>  'day',
+        60 * 60                 =>  'hour',
+        60                      =>  'minute',
+        1                       =>  'second'
+    );
+    foreach ($condition as $secs => $str) {
+        $d = $time_difference / $secs;
+        if ($d >= 1) {
+            $r = round($d);
+            
+            return $r . ' ' . $str . ($r > 1 ? 's' : '') . ' ago';
+        }
+    }
+}
 ?>
 <section class="flex-1 p-8 space-y-8 overflow-y-auto bg-slate-50 dark:bg-[#0b132b] transition-colors duration-300">
 
@@ -85,29 +111,29 @@ $pendingRequests = array_filter($requests, function($r) {
                                     <?= htmlspecialchars($request['skill_name'] ?? 'Unknown'); ?>
                                 </span>
                                 <span class="text-slate-400 flex items-center">
-                                    <i class="fa-regular fa-clock mr-1.5"></i>Just now
+                                    <i class="fa-regular fa-clock mr-1.5"></i><?= timeAgo($request['created_at']); ?>
                                 </span>
                             </div>
                             <form action="/peersync/app/controller/HelpRequestController.php" method="post" class="inline">
-                            <input type="hidden" name="request_id" value="<?= $request['id']; ?>">
-                            
-                            <?php 
-                                $isAssignedOrResolved = (strtoupper($request['status']) !== 'PENDING'); 
-                            ?>
+                                <input type="hidden" name="request_id" value="<?= $request['id']; ?>">
 
-                            <button name="assign" type="submit"
-                                <?= $isAssignedOrResolved ? 'disabled' : ''; ?>
-                                class="<?= $isAssignedOrResolved 
-                                    ? 'bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed' 
-                                    : 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-500/20'; ?> 
+                                <?php
+                                $isAssignedOrResolved = (strtoupper($request['status']) !== 'PENDING');
+                                ?>
+
+                                <button name="assign" type="submit"
+                                    <?= $isAssignedOrResolved ? 'disabled' : ''; ?>
+                                    class="<?= $isAssignedOrResolved
+                                                ? 'bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                                                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-500/20'; ?> 
                                     text-[11px] font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5">
-                                
-                                <i class="fa-solid fa-hand-pointer text-[10px]"></i>
-                                <span>
-                                    <?= $isAssignedOrResolved ? 'Already Taken' : 'Take this request'; ?>
-                                </span>
-                            </button>
-                        </form>
+
+                                    <i class="fa-solid fa-hand-pointer text-[10px]"></i>
+                                    <span>
+                                        <?= $isAssignedOrResolved ? 'Already Taken' : 'Take this request'; ?>
+                                    </span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 <?php endforeach; ?>

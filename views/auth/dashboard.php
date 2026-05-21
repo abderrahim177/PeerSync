@@ -1,16 +1,16 @@
-<?php 
-    require_once __DIR__ . '/login-process.php';
-    $name = $_SESSION['user_name'];
-    $role = $_SESSION['user_role'];
+<?php
+require_once __DIR__ . '/login-process.php';
+$name = $_SESSION['user_name'];
+$role = $_SESSION['user_role'];
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$words = explode(" ", $name); 
+$words = explode(" ", $name);
 $initials = "";
 if (count($words) >= 2) {
     $initials = strtoupper(mb_substr($words[0], 0, 1) . mb_substr($words[1], 0, 1));
-} else {  
+} else {
     $initials = strtoupper(mb_substr($words[0], 0, 1));
 }
 
@@ -31,26 +31,52 @@ $stats        = $helpRepo->getRequestStats();
 ?>
 <!DOCTYPE html>
 <html lang="en" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PeerSync Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { darkMode: 'class' }
+        tailwind.config = {
+            darkMode: 'class'
+        }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
     </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800 dark:bg-[#0b132b] dark:text-slate-200 h-screen w-screen flex text-sm overflow-hidden transition-colors duration-300 relative">
 
     <!-- ASIDE -->
@@ -97,7 +123,11 @@ $stats        = $helpRepo->getRequestStats();
                         <!-- Espace Tuteur link -->
                         <a href="?section=tutor" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition
                             <?= $section === 'tutor' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-4 text-center flex-shrink-0"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M11 2l1.5 1.5L15 1"/></svg>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-4 text-center flex-shrink-0">
+                                <circle cx="8" cy="5" r="3" />
+                                <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+                                <path d="M11 2l1.5 1.5L15 1" />
+                            </svg>
                             <span>Espace Tuteur</span>
                         </a>
 
@@ -145,14 +175,14 @@ $stats        = $helpRepo->getRequestStats();
             <h1 class="text-xl font-semibold text-slate-900 dark:text-white">
                 <?= $section === 'tutor' ? 'Espace Tuteur' : 'Dashboard' ?>
             </h1>
-            
+
             <div class="flex items-center space-x-6">
                 <div class="relative w-80 hidden sm:block">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 dark:text-slate-500">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </span>
-                    <input type="text" placeholder="Search requests, tutors..." 
-                           class="w-full bg-slate-100 dark:bg-[#111936] text-slate-800 dark:text-slate-300 pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm">
+                    <input type="text" placeholder="Search requests, tutors..."
+                        class="w-full bg-slate-100 dark:bg-[#111936] text-slate-800 dark:text-slate-300 pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm">
                 </div>
 
                 <div class="flex items-center space-x-2 bg-slate-100 dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] p-1.5 rounded-xl">
@@ -185,81 +215,80 @@ $stats        = $helpRepo->getRequestStats();
 
     <!-- MODAL: New Request -->
     <div id="request-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-    <form action="/peersync/app/controller/HelpRequestController.php" method="post" class="bg-white dark:bg-[#111936] w-full max-w-xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300" id="modal-card">
-        
-        <div class="p-6 pb-4 border-b border-slate-100 dark:border-[#1e295d] flex items-start justify-between">
-            <div>
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Create Help Request</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Describe your problem and a tutor will be assigned to help you.</p>
-            </div>
-            <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
+        <form action="/peersync/app/controller/HelpRequestController.php" method="post" class="bg-white dark:bg-[#111936] w-full max-w-xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300" id="modal-card">
 
-        <div class="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
-            
-            <div class="space-y-1.5">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Title <span class="text-red-500">*</span></label>
-                <input id="modal-title" name="title" type="text" placeholder="e.g., Help with React useEffect hook" 
-                       class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm">
-                <p id="title-error" class="text-[11px] text-red-500 hidden">Title is required.</p>
-                <p class="text-[11px] text-slate-400 dark:text-slate-500">A clear, concise title helps tutors understand your issue quickly.</p>
-            </div>
-
-            <div class="space-y-1.5">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Technology / Skill <span class="text-red-500">*</span></label>
-                <div class="relative">
-                    <select id="modal-tech" name="technology" class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition text-sm appearance-none shadow-sm cursor-pointer">
-                        <option value="">select technology. . .</option>
-                        <?php foreach ($technologies as $tech): ?>
-                        <option value="<?= $tech['id']; ?>"><?= htmlspecialchars($tech['name']); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 pointer-events-none">
-                        <i class="fa-solid fa-chevron-down text-xs"></i>
-                    </span>
+            <div class="p-6 pb-4 border-b border-slate-100 dark:border-[#1e295d] flex items-start justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Create Help Request</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Describe your problem and a tutor will be assigned to help you.</p>
                 </div>
-                <p id="tech-error" class="text-[11px] text-red-500 hidden">Please select a technology.</p>
+                <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
 
-            <div class="space-y-1.5">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Description <span class="text-red-500">*</span></label>
-                <textarea id="modal-desc" name="description" rows="4" placeholder="Describe your problem in detail. Include any error messages, what you've tried, and what you expected to happen." 
-                          class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-3 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm resize-none"></textarea>
-                <p id="desc-error" class="text-[11px] text-red-500 hidden">Description is required.</p>
-                <p class="text-[11px] text-slate-400 dark:text-slate-500">The more detail you provide, the faster you'll get effective help.</p>
-            </div>
+            <div class="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Title <span class="text-red-500">*</span></label>
+                    <input id="modal-title" name="title" type="text" placeholder="e.g., Help with React useEffect hook"
+                        class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm">
+                    <p id="title-error" class="text-[11px] text-red-500 hidden">Title is required.</p>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500">A clear, concise title helps tutors understand your issue quickly.</p>
+                </div>
 
-            <div class="bg-blue-50/50 dark:bg-[#0b132b]/50 border border-blue-100 dark:border-[#1e295d] rounded-xl p-4 flex items-start space-x-3">
-                <i class="fa-regular fa-circle-question text-blue-500 dark:text-blue-400 text-base mt-0.5"></i>
-                <div class="space-y-1">
-                    <h4 class="text-xs font-semibold text-slate-800 dark:text-slate-300">Tips for a great request</h4>
-                    <ul class="text-[11px] text-slate-500 dark:text-slate-400 space-y-1 list-disc list-inside pl-0.5">
-                        <li>Be specific about what you're trying to accomplish</li>
-                        <li>Include relevant code snippets or error messages</li>
-                        <li>Mention what you've already tried</li>
-                        <li>Share links to documentation you've read</li>
-                    </ul>
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Technology / Skill <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <select id="modal-tech" name="technology" class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition text-sm appearance-none shadow-sm cursor-pointer">
+                            <option value="">select technology. . .</option>
+                            <?php foreach ($technologies as $tech): ?>
+                                <option value="<?= $tech['id']; ?>"><?= htmlspecialchars($tech['name']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 pointer-events-none">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </span>
+                    </div>
+                    <p id="tech-error" class="text-[11px] text-red-500 hidden">Please select a technology.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Description <span class="text-red-500">*</span></label>
+                    <textarea id="modal-desc" name="description" rows="4" placeholder="Describe your problem in detail. Include any error messages, what you've tried, and what you expected to happen."
+                        class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-3 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm resize-none"></textarea>
+                    <p id="desc-error" class="text-[11px] text-red-500 hidden">Description is required.</p>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500">The more detail you provide, the faster you'll get effective help.</p>
+                </div>
+
+                <div class="bg-blue-50/50 dark:bg-[#0b132b]/50 border border-blue-100 dark:border-[#1e295d] rounded-xl p-4 flex items-start space-x-3">
+                    <i class="fa-regular fa-circle-question text-blue-500 dark:text-blue-400 text-base mt-0.5"></i>
+                    <div class="space-y-1">
+                        <h4 class="text-xs font-semibold text-slate-800 dark:text-slate-300">Tips for a great request</h4>
+                        <ul class="text-[11px] text-slate-500 dark:text-slate-400 space-y-1 list-disc list-inside pl-0.5">
+                            <li>Be specific about what you're trying to accomplish</li>
+                            <li>Include relevant code snippets or error messages</li>
+                            <li>Mention what you've already tried</li>
+                            <li>Share links to documentation you've read</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="p-5 border-t border-slate-100 dark:border-[#1e295d] flex items-center justify-end space-x-3 bg-slate-50/50 dark:bg-[#111936]">
-            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
-            
-            <button id="submit-request-btn" name="submit" type="submit" disabled 
+            <div class="p-5 border-t border-slate-100 dark:border-[#1e295d] flex items-center justify-end space-x-3 bg-slate-50/50 dark:bg-[#111936]">
+                <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
+
+                <button id="submit-request-btn" name="submit" type="submit" disabled
                     class="px-5 py-2 bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 font-medium text-sm rounded-xl transition cursor-not-allowed">
-                Submit Request
-            </button>
-        </div>
-    </form>
-</div>
+                    Submit Request
+                </button>
+            </div>
+        </form>
+    </div>
 
     <!-- MODAL: Details -->
     <div id="details-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
         <div id="details-card" class="bg-white dark:bg-[#0b132b] w-full max-w-4xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300 text-slate-600 dark:text-slate-300">
-            
+
             <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <button onclick="closeDetailsModal()" class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
                     <i class="fa-solid fa-arrow-left"></i>
@@ -297,7 +326,7 @@ $stats        = $helpRepo->getRequestStats();
                                 <div class="flex justify-between items-start">
                                     <div>
                                         <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Request created</h4>
-                                        <p class="text-[11px] text-slate-500 mt-0.5">by Ahmed El Fassi</p>
+                                        <p class="text-[11px] text-slate-500 mt-0.5"><?= htmlspecialchars($name) ?></p>
                                     </div>
                                     <span class="text-[10px] text-slate-400 dark:text-slate-500">May 18, 2:30 PM</span>
                                 </div>
@@ -336,20 +365,20 @@ $stats        = $helpRepo->getRequestStats();
                     </div>
 
                     <div class="space-y-3 pt-2">
-    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
-    
-    <div class="space-y-2">
-        <textarea rows="3" placeholder="Write a comment..." 
-                  class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
-        
-        <div class="flex justify-end">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-sm">
-                <i class="fa-regular fa-paper-plane text-[10px]"></i>
-                <span>Send</span>
-            </button>
-        </div>
-    </div>
-</div>
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
+
+                        <div class="space-y-2">
+                            <textarea rows="3" placeholder="Write a comment..."
+                                class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
+
+                            <div class="flex justify-end">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-sm">
+                                    <i class="fa-regular fa-paper-plane text-[10px]"></i>
+                                    <span>Send</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="space-y-5">
@@ -382,39 +411,39 @@ $stats        = $helpRepo->getRequestStats();
     <script>
         // Dark mode toggle
         // Dark mode toggle — persist in localStorage
-const toggleBtn = document.getElementById('dark-mode-toggle');
-const switchHandle = document.getElementById('switch-handle');
-const modeIcon = document.getElementById('mode-icon');
-const htmlEl = document.documentElement;
+        const toggleBtn = document.getElementById('dark-mode-toggle');
+        const switchHandle = document.getElementById('switch-handle');
+        const modeIcon = document.getElementById('mode-icon');
+        const htmlEl = document.documentElement;
 
-    if (localStorage.getItem('theme') === 'light') {
-        document.documentElement.classList.remove('dark');
-    }
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
 
-// Apply saved preference on page load
-const savedMode = localStorage.getItem('theme');
-if (savedMode === 'light') {
-    htmlEl.classList.remove('dark');
-    toggleBtn.classList.replace('bg-blue-600', 'bg-slate-300');
-    switchHandle.classList.replace('translate-x-5', 'translate-x-0');
-    modeIcon.className = 'fa-solid fa-sun text-amber-500 mr-1';
-}
+        // Apply saved preference on page load
+        const savedMode = localStorage.getItem('theme');
+        if (savedMode === 'light') {
+            htmlEl.classList.remove('dark');
+            toggleBtn.classList.replace('bg-blue-600', 'bg-slate-300');
+            switchHandle.classList.replace('translate-x-5', 'translate-x-0');
+            modeIcon.className = 'fa-solid fa-sun text-amber-500 mr-1';
+        }
 
-toggleBtn.addEventListener('click', () => {
-    if (htmlEl.classList.contains('dark')) {
-        htmlEl.classList.remove('dark');
-        toggleBtn.classList.replace('bg-blue-600', 'bg-slate-300');
-        switchHandle.classList.replace('translate-x-5', 'translate-x-0');
-        modeIcon.className = 'fa-solid fa-sun text-amber-500 mr-1';
-        localStorage.setItem('theme', 'light');
-    } else {
-        htmlEl.classList.add('dark');
-        toggleBtn.classList.replace('bg-slate-300', 'bg-blue-600');
-        switchHandle.classList.replace('translate-x-0', 'translate-x-5');
-        modeIcon.className = 'fa-solid fa-moon text-slate-400 mr-1';
-        localStorage.setItem('theme', 'dark');
-    }
-});
+        toggleBtn.addEventListener('click', () => {
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                toggleBtn.classList.replace('bg-blue-600', 'bg-slate-300');
+                switchHandle.classList.replace('translate-x-5', 'translate-x-0');
+                modeIcon.className = 'fa-solid fa-sun text-amber-500 mr-1';
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlEl.classList.add('dark');
+                toggleBtn.classList.replace('bg-slate-300', 'bg-blue-600');
+                switchHandle.classList.replace('translate-x-0', 'translate-x-5');
+                modeIcon.className = 'fa-solid fa-moon text-slate-400 mr-1';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
 
         // New Request modal
         const modal = document.getElementById('request-modal');
@@ -424,11 +453,14 @@ toggleBtn.addEventListener('click', () => {
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modalCard.classList.replace('scale-95', 'scale-100');
         }
+
         function closeModal() {
             modal.classList.add('opacity-0', 'pointer-events-none');
             modalCard.classList.replace('scale-100', 'scale-95');
         }
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
 
         // Details modal
         const detailsModal = document.getElementById('details-modal');
@@ -438,68 +470,72 @@ toggleBtn.addEventListener('click', () => {
             detailsModal.classList.remove('opacity-0', 'pointer-events-none');
             detailsCard.classList.replace('scale-95', 'scale-100');
         }
+
         function closeDetailsModal() {
             detailsModal.classList.add('opacity-0', 'pointer-events-none');
             detailsCard.classList.replace('scale-100', 'scale-95');
         }
-        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeDetailsModal(); });
-    
-    // message of validation
+        detailsModal.addEventListener('click', (e) => {
+            if (e.target === detailsModal) closeDetailsModal();
+        });
 
-    document.addEventListener("DOMContentLoaded", function () {
-    const titleInput = document.getElementById("modal-title");
-    const techSelect = document.getElementById("modal-tech");
-    const descInput = document.getElementById("modal-desc");
-    const submitBtn = document.getElementById("submit-request-btn");
+        // message of validation
 
-    const titleError = document.getElementById("title-error");
-    const techError = document.getElementById("tech-error");
-    const descError = document.getElementById("desc-error");
+        document.addEventListener("DOMContentLoaded", function() {
+            const titleInput = document.getElementById("modal-title");
+            const techSelect = document.getElementById("modal-tech");
+            const descInput = document.getElementById("modal-desc");
+            const submitBtn = document.getElementById("submit-request-btn");
 
-    function validateForm() {
-        let isTitleValid = titleInput.value.trim() !== "";
-        let isTechValid = techSelect.value !== "";
-        let isDescValid = descInput.value.trim() !== "";
+            const titleError = document.getElementById("title-error");
+            const techError = document.getElementById("tech-error");
+            const descError = document.getElementById("desc-error");
 
-        // إظهار أو إخفاء رسائل الخطأ لكل حقل
-        if (titleInput.value.trim() === "" && titleInput === document.activeElement) {
-            titleError.classList.remove("hidden");
-        } else if (titleInput.value.trim() !== "") {
-            titleError.classList.add("hidden");
-        }
+            function validateForm() {
+                let isTitleValid = titleInput.value.trim() !== "";
+                let isTechValid = techSelect.value !== "";
+                let isDescValid = descInput.value.trim() !== "";
 
-        if (techSelect.value === "" && techSelect === document.activeElement) {
-            techError.classList.remove("hidden");
-        } else if (techSelect.value !== "") {
-            techError.classList.add("hidden");
-        }
+                // إظهار أو إخفاء رسائل الخطأ لكل حقل
+                if (titleInput.value.trim() === "" && titleInput === document.activeElement) {
+                    titleError.classList.remove("hidden");
+                } else if (titleInput.value.trim() !== "") {
+                    titleError.classList.add("hidden");
+                }
 
-        if (descInput.value.trim() === "" && descInput === document.activeElement) {
-            descError.classList.remove("hidden");
-        } else if (descInput.value.trim() !== "") {
-            descError.classList.add("hidden");
-        }
+                if (techSelect.value === "" && techSelect === document.activeElement) {
+                    techError.classList.remove("hidden");
+                } else if (techSelect.value !== "") {
+                    techError.classList.add("hidden");
+                }
 
-        // تحويل وتغيير ستايل الزر بناءً على صحة البيانات كامة
-        if (isTitleValid && isTechValid && isDescValid) {
-            submitBtn.removeAttribute("disabled");
-            submitBtn.className = "px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition shadow-md shadow-blue-500/10 cursor-pointer";
-        } else {
-            submitBtn.setAttribute("disabled", "true");
-            submitBtn.className = "px-5 py-2 bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 font-medium text-sm rounded-xl transition cursor-not-allowed";
-        }
-    }
+                if (descInput.value.trim() === "" && descInput === document.activeElement) {
+                    descError.classList.remove("hidden");
+                } else if (descInput.value.trim() !== "") {
+                    descError.classList.add("hidden");
+                }
 
-    
-    titleInput.addEventListener("input", validateForm);
-    titleInput.addEventListener("blur", validateForm);
+                // تحويل وتغيير ستايل الزر بناءً على صحة البيانات كامة
+                if (isTitleValid && isTechValid && isDescValid) {
+                    submitBtn.removeAttribute("disabled");
+                    submitBtn.className = "px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition shadow-md shadow-blue-500/10 cursor-pointer";
+                } else {
+                    submitBtn.setAttribute("disabled", "true");
+                    submitBtn.className = "px-5 py-2 bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 font-medium text-sm rounded-xl transition cursor-not-allowed";
+                }
+            }
 
-    techSelect.addEventListener("change", validateForm);
-    techSelect.addEventListener("blur", validateForm);
 
-    descInput.addEventListener("input", validateForm);
-    descInput.addEventListener("blur", validateForm);
-});
+            titleInput.addEventListener("input", validateForm);
+            titleInput.addEventListener("blur", validateForm);
+
+            techSelect.addEventListener("change", validateForm);
+            techSelect.addEventListener("blur", validateForm);
+
+            descInput.addEventListener("input", validateForm);
+            descInput.addEventListener("blur", validateForm);
+        });
     </script>
 </body>
+
 </html>

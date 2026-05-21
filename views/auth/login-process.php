@@ -34,14 +34,12 @@ if (isset($_POST['login'])) {
 
             header("Location: dashboard.php");
             exit;
-
         } else {
 
             $_SESSION['error'] = "Invalid credentials";
             header("Location: login.php");
             exit;
         }
-
     } catch (PDOException $e) {
 
         $_SESSION['error'] = $e->getMessage();
@@ -49,4 +47,3 @@ if (isset($_POST['login'])) {
         exit;
     }
 }
-?>
