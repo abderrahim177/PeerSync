@@ -41,43 +41,6 @@ $pendingRequests = array_filter($requests, function($r) {
             </span>
         </div>
     </div>
-
-    <!-- Tutor stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
-            <div class="space-y-1">
-                <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Awaiting Tutor</p>
-                <p class="text-3xl font-bold text-slate-900 dark:text-white"><?= count($pendingRequests); ?></p>
-                <p class="text-xs text-amber-500 font-medium">Need attention</p>
-            </div>
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg">
-                <i class="fa-regular fa-clock"></i>
-            </div>
-        </div>
-
-        <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
-            <div class="space-y-1">
-                <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Assigned</p>
-                <p class="text-3xl font-bold text-slate-900 dark:text-white"><?= $stats['assigned'] ?? 0; ?></p>
-                <p class="text-xs text-blue-500 font-medium">In progress</p>
-            </div>
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
-                <i class="fa-regular fa-user"></i>
-            </div>
-        </div>
-
-        <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
-            <div class="space-y-1">
-                <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Resolved</p>
-                <p class="text-3xl font-bold text-slate-900 dark:text-white"><?= $stats['resolved']; ?></p>
-                <p class="text-xs text-emerald-500 font-medium">Completed</p>
-            </div>
-            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
-                <i class="fa-regular fa-circle-check"></i>
-            </div>
-        </div>
-    </div>
-
     <!-- Pending requests list -->
     <div class="space-y-4">
         <div class="flex items-center justify-between">
@@ -125,14 +88,26 @@ $pendingRequests = array_filter($requests, function($r) {
                                     <i class="fa-regular fa-clock mr-1.5"></i>Just now
                                 </span>
                             </div>
-                            <form action="../../app/controller/HelpRequestController.php" method="post" class="inline">
-                                <input type="hidden" name="request_id" value="<?= $request['id']; ?>">
-                                <button name="assign" type="submit"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm shadow-blue-500/20">
-                                    <i class="fa-solid fa-hand-pointer text-[10px]"></i>
-                                    <span>Take this request</span>
-                                </button>
-                            </form>
+                            <form action="/peersync/app/controller/HelpRequestController.php" method="post" class="inline">
+                            <input type="hidden" name="request_id" value="<?= $request['id']; ?>">
+                            
+                            <?php 
+                                $isAssignedOrResolved = (strtoupper($request['status']) !== 'PENDING'); 
+                            ?>
+
+                            <button name="assign" type="submit"
+                                <?= $isAssignedOrResolved ? 'disabled' : ''; ?>
+                                class="<?= $isAssignedOrResolved 
+                                    ? 'bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed' 
+                                    : 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-500/20'; ?> 
+                                    text-[11px] font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5">
+                                
+                                <i class="fa-solid fa-hand-pointer text-[10px]"></i>
+                                <span>
+                                    <?= $isAssignedOrResolved ? 'Already Taken' : 'Take this request'; ?>
+                                </span>
+                            </button>
+                        </form>
                         </div>
                     </div>
                 <?php endforeach; ?>

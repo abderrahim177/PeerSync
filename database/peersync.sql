@@ -29,6 +29,12 @@ INSERT INTO skills (name) VALUES
 ('HTML'),
 ('CSS');
 
+INSERT INTO skills (name) VALUES
+('react.js'),
+('Java'),
+('Laravel'),
+('Spring Boot');
+
 CREATE TABLE user_skills (
     user_id INT,
     skill_id INT,

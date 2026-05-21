@@ -27,7 +27,7 @@ $helpRepo = new HelpRequestRepository($dbConnection);
 
 $technologies = $helpRepo->getAllTechnologies();
 $requests     = $helpRepo->getAllRequests();
-$stats        = $helpRepo->getRequestStats();
+$stats    = $helpRepo->getRequestStats();
 ?>
 
 <section class="flex-1 p-8 space-y-8 overflow-y-auto bg-slate-50 dark:bg-[#0b132b] transition-colors duration-300">
@@ -49,18 +49,27 @@ $stats        = $helpRepo->getRequestStats();
             <div class="space-y-1">
                 <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Pending Requests</p>
                 <p class="text-3xl font-bold text-slate-900 dark:text-white"><?= $stats['pending']; ?></p>
-                <p class="text-xs text-red-500 font-medium">-12% from last week</p>
+                <p class="text-xs text-amber-500 font-medium">Need attention</p>
             </div>
             <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
                 <i class="fa-regular fa-clock"></i>
             </div>
         </div>
-
-        <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
+          <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
+            <div class="space-y-1">
+                <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Assigned</p>
+                <p class="text-3xl font-bold text-slate-900 dark:text-white"><?= $stats['assigned'] ?? 0; ?></p>
+                <p class="text-xs text-blue-500 font-medium">In progress</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+         <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
             <div class="space-y-1">
                 <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Resolved</p>
                 <p class="text-3xl font-bold text-slate-900 dark:text-white"><?= $stats['resolved']; ?></p>
-                <p class="text-xs text-emerald-500 font-medium">+25% from last week</p>
+                <p class="text-xs text-emerald-500 font-medium">Completed</p>
             </div>
             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
                 <i class="fa-regular fa-circle-check"></i>
@@ -134,7 +143,8 @@ $stats        = $helpRepo->getRequestStats();
                                 <span class="flex items-center"><i class="fa-regular fa-clock mr-1.5"></i>Just now</span>
                             </div>
                             <button onclick="openDetailsModal()" class="text-blue-600 dark:text-blue-400 font-medium hover:underline inline-flex items-center space-x-1 bg-transparent border-0 cursor-pointer">
-                                <span>View details</span>
+                                
+                            <span>View details</span>
                                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
