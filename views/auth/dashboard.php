@@ -1,3 +1,39 @@
+<?php 
+    require_once __DIR__ . '/login-process.php';
+    $name = $_SESSION['user_name'];
+    $role = $_SESSION['user_role'];
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$words = explode(" ", $name); 
+$initials = "";
+if (count($words) >= 2) {
+    $initials = strtoupper(mb_substr($words[0], 0, 1) . mb_substr($words[1], 0, 1));
+} else {  
+    $initials = strtoupper(mb_substr($words[0], 0, 1));
+}
+
+// data 
+require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../repositories/HelpRequestRepository.php';
+
+$database = new Database();
+$dbConnection = $database->connect();
+$helpRepo = new HelpRequestRepository($dbConnection);
+
+
+$technologies = $helpRepo->getAllTechnologies();
+
+// data of requests 
+$helpRepo = new HelpRequestRepository($dbConnection);
+
+$technologies = $helpRepo->getAllTechnologies();
+
+
+$requests = $helpRepo->getAllRequests();
+?>
+
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -16,6 +52,10 @@
         body { font-family: 'Inter', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-[#0b132b] dark:text-slate-200 h-screen w-screen flex text-sm overflow-hidden transition-colors duration-300 relative">
@@ -85,12 +125,12 @@
 
         <div class="p-4 border-t border-slate-200 dark:border-[#1e295d] bg-white dark:bg-[#111936] flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/20 cursor-pointer transition sticky bottom-0 z-10 flex-shrink-0">
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-xs">
-                    AE
+                <div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm cursor-pointer">
+                    <?php echo htmlspecialchars($initials); ?>
                 </div>
                 <div>
-                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Ahmed El Mansouri</h4>
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500">Student</span>
+                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight"><?= $name ?></h4>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500"><?= $role ?></span>
                 </div>
             </div>
             <i class="fa-solid fa-chevron-down text-xs text-slate-400 dark:text-slate-500"></i>
@@ -125,101 +165,160 @@
                 </div>
 
                 <div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm cursor-pointer">
-                    AE
+                    <?php echo htmlspecialchars($initials); ?>
                 </div>
             </div>
         </header>
 
         <section class="flex-1 p-8 space-y-8 overflow-y-auto bg-slate-50 dark:bg-[#0b132b] transition-colors duration-300">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Welcome back, Ahmed!</h2>
-                <p class="text-slate-500 dark:text-slate-400 text-sm">Here is what is happening with your tutoring requests</p>
+            
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Welcome back, <span><?= $name . '!' ?></span></h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Track your help requests and get assistance from tutors.</p>
+                </div>
+                <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2.5 rounded-xl flex items-center space-x-2 transition text-sm shadow-md shadow-blue-500/10 self-start sm:self-auto">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>New Request</span>
+                </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 flex items-start space-x-5 hover:border-slate-300 dark:hover:border-slate-700 transition shadow-sm">
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xl flex-shrink-0">
-                        <i class="fa-regular fa-file-lines"></i>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Pending Requests</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white">1</p>
+                        <p class="text-xs text-red-500 font-medium">-12% from last week</p>
                     </div>
-                    <div>
-                        <span class="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">3</span>
-                        <h3 class="text-slate-500 dark:text-slate-400 font-medium mt-1">Active Requests</h3>
-                        <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium block mt-1">+1 this week</span>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 flex items-start space-x-5 hover:border-slate-300 dark:hover:border-slate-700 transition shadow-sm">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-xl flex-shrink-0">
-                        <i class="fa-regular fa-circle-check"></i>
-                    </div>
-                    <div>
-                        <span class="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">12</span>
-                        <h3 class="text-slate-500 dark:text-slate-400 font-medium mt-1">Completed Sessions</h3>
-                        <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium block mt-1">+4 this month</span>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 flex items-start space-x-5 hover:border-slate-300 dark:hover:border-slate-700 transition shadow-sm">
-                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-500 text-xl flex-shrink-0">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
                         <i class="fa-regular fa-clock"></i>
                     </div>
-                    <div>
-                        <span class="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">24h</span>
-                        <h3 class="text-slate-500 dark:text-slate-400 font-medium mt-1">Total Learning Time</h3>
-                        <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium block mt-1">+6h this week</span>
+                </div>
+
+                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Active Sessions</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white">2</p>
+                        <div class="h-4"></div> </div>
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-lg">
+                        <i class="fa-regular fa-clipboard"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Resolved</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white">1</p>
+                        <p class="text-xs text-emerald-500 font-medium">+25% from last week</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
+                    <div class="space-y-1">
+                        <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Total Requests</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white">4</p>
+                        <div class="h-4"></div>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-500 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
-                <div class="lg:col-span-2 bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 space-y-6 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-wide">Active Requests</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Your pending tutoring requests</p>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-wide">Recent Requests</h3>
+                    <div class="flex items-center space-x-3 w-72">
+                        <div class="relative flex-1">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                            </span>
+                            <input type="text" placeholder="Search requests..." class="w-full bg-white dark:bg-[#111936] text-slate-800 dark:text-slate-300 pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 text-xs placeholder-slate-400">
                         </div>
-                        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl flex items-center space-x-2 transition text-sm shadow-md shadow-blue-500/10">
-                            <i class="fa-solid fa-plus text-xs"></i>
-                            <span>New Request</span>
+                        <button class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] p-2.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition flex items-center justify-center h-9 w-9 flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 8.293A1 1 0 013 7.586V4z"></path>
+                            </svg>
                         </button>
                     </div>
-
-                    <div class="border border-blue-200 dark:border-blue-600/30 bg-blue-50/30 dark:bg-[#131f47]/40 rounded-xl p-5 space-y-4 relative hover:border-blue-300 dark:hover:border-blue-500/50 transition">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <h4 class="text-base font-semibold text-slate-900 dark:text-white">Help with Data Structures Assignment</h4>
-                                <span class="text-xs text-blue-600 dark:text-blue-400 font-medium inline-block mt-1">Algorithms & Data Structures</span>
-                            </div>
-                            <span class="bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-500 text-xs font-semibold px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-500/20">Pending</span>
-                        </div>
-                        <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed max-w-2xl">
-                            I need help understanding binary search trees and implementing them in Java. The assignment is due next week and I am struggling with the...
-                        </p>
-                    </div>
                 </div>
+                <!-- start card requets -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    
+    <?php if (empty($requests)): ?>
+        <p class="text-slate-500 dark:text-slate-400 text-sm col-span-2 text-center py-4">No help requests found.</p>
+    <?php else: ?>
+        
+        <?php foreach ($requests as $request): ?>
+            <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 space-y-4 shadow-sm relative hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col justify-between">
+                <div class="space-y-2">
+                    <div class="flex items-start justify-between">
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
+                            <?= htmlspecialchars($request['title']); ?>
+                        </h4>
+                        
+                        <?php 
+                            $status = strtoupper($request['status']);
+                            $statusClass = "bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20"; // Pending
+                            if ($status === 'ASSIGNED') {
+                                $statusClass = "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
+                            } elseif ($status === 'RESOLVED') {
+                                $statusClass = "bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 border-emerald-500/20";
+                            }
+                        ?>
+                        <span class="<?= $statusClass; ?> text-[11px] font-semibold px-2.5 py-0.5 rounded-full border">
+                            <?= ucfirst(strtolower($status)); ?>
+                        </span>
+                    </div>
+                    
+                    <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                        <?= htmlspecialchars($request['description']); ?>
+                    </p>
+                </div>
+                
+                <div class="pt-2 border-t border-slate-100 dark:border-[#1e295d]/60 flex items-center justify-between text-slate-400 dark:text-slate-500 text-xs">
+                    <div class="flex items-center space-x-4">
+                        <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">
+                            <?= htmlspecialchars($request['skill_name'] ?? 'Unknown'); ?>
+                        </span>
+                        
+                        <span class="flex items-center"><i class="fa-regular fa-clock mr-1.5"></i>Just now</span>
+                    </div>
+                    
+                    <button onclick="openDetailsModal()" class="text-blue-600 dark:text-blue-400 font-medium hover:underline inline-flex items-center space-x-1 bg-transparent border-0 cursor-pointer">
+                        <span>View details</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+    <?php endif; ?>
+
+</div>
             </div>
         </section>
     </main>
 
     <div id="request-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-        
-        <div class="bg-white dark:bg-[#111936] w-full max-w-xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300" id="modal-card">
-            
+        <form action="../../app/controller/HelpRequestController.php" method="post" class="bg-white dark:bg-[#111936] w-full max-w-xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300" id="modal-card">
             <div class="p-6 pb-4 border-b border-slate-100 dark:border-[#1e295d] flex items-start justify-between">
                 <div>
                     <h3 class="text-lg font-bold text-slate-900 dark:text-white">Create Help Request</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Describe your problem and a tutor will be assigned to help you.</p>
                 </div>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
             <div class="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
-                
                 <div class="space-y-1.5">
                     <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Title <span class="text-red-500">*</span></label>
-                    <input type="text" placeholder="e.g., Help with React useEffect hook" 
+                    <input name="title" type="text" placeholder="e.g., Help with React useEffect hook" 
                            class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm">
                     <p class="text-[11px] text-slate-400 dark:text-slate-500">A clear, concise title helps tutors understand your issue quickly.</p>
                 </div>
@@ -227,12 +326,11 @@
                 <div class="space-y-1.5">
                     <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Technology / Skill <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <select class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition text-sm appearance-none shadow-sm cursor-pointer">
-                            <option value="" disabled selected>Select a technology</option>
-                            <option value="react">React.js</option>
-                            <option value="java">Java</option>
-                            <option value="databases">Database Systems</option>
-                            <option value="tailwind">Tailwind CSS</option>
+                        <select name="technology" class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition text-sm appearance-none shadow-sm cursor-pointer">
+                            <option class="text-gray-300" value="">select technology. . .</option>
+                            <?php foreach ($technologies as $tech): ?>
+                            <option value="<?= $tech['id']; ?>"><?= htmlspecialchars($tech['name']); ?></option>
+                            <?php endforeach; ?>
                         </select>
                         <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 pointer-events-none">
                             <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -242,7 +340,7 @@
 
                 <div class="space-y-1.5">
                     <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Description <span class="text-red-500">*</span></label>
-                    <textarea rows="4" placeholder="Describe your problem in detail. Include any error messages, what you've tried, and what you expected to happen." 
+                    <textarea name="description" rows="4" placeholder="Describe your problem in detail. Include any error messages, what you've tried, and what you expected to happen." 
                               class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-3 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm resize-none"></textarea>
                     <p class="text-[11px] text-slate-400 dark:text-slate-500">The more detail you provide, the faster you'll get effective help.</p>
                 </div>
@@ -262,11 +360,141 @@
             </div>
 
             <div class="p-5 border-t border-slate-100 dark:border-[#1e295d] flex items-center justify-end space-x-3 bg-slate-50/50 dark:bg-[#111936]">
-                <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
-                <button class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition shadow-md shadow-blue-500/10">Submit Request</button>
+                <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
+                <button name="submit" type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition shadow-md shadow-blue-500/10">Submit Request</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div id="details-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="details-card" class="bg-white dark:bg-[#0b132b] w-full max-w-4xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300 text-slate-600 dark:text-slate-300 transition-colors duration-300">
+            
+            <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <button onclick="closeDetailsModal()" class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div class="md:col-span-2 space-y-6">
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">React</span>
+                            <span class="bg-teal-500/10 text-teal-600 dark:text-teal-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">In Progress</span>
+                        </div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Help with React useEffect cleanup</h2>
+                        
+                        <div class="text-slate-600 dark:text-slate-400 space-y-3 text-xs leading-relaxed">
+                            <p>I'm having trouble understanding when and how to properly clean up effects in React. My component keeps throwing memory leak warnings when navigating away from the page.</p>
+                            <p>I've tried returning a cleanup function but I'm not sure if I'm doing it correctly. The warning says 'Can't perform a React state update on an unmounted component'.</p>
+                        </div>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 flex items-center"><i class="fa-regular fa-clock mr-1.5"></i>May 18, 2026 at 2:30 PM</p>
+                    </div>
+
+                    <hr class="border-slate-200 dark:border-slate-800">
+
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white tracking-wide">Activity Timeline</h3>
+                        
+                        <div class="relative pl-6 space-y-6 before:absolute before:bottom-2 before:top-2 before:left-[11px] before:w-[1px] before:bg-slate-200 dark:before:bg-slate-800">
+                            <div class="relative">
+                                <div class="absolute -left-[21px] mt-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                    <i class="fa-regular fa-clock"></i>
+                                </div>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Request created</h4>
+                                        <p class="text-[11px] text-slate-500 mt-0.5">by Ahmed El Fassi</p>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500">May 18, 2:30 PM</span>
+                                </div>
+                            </div>
+
+                            <div class="relative">
+                                <div class="absolute -left-[21px] mt-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Tutor assigned</h4>
+                                        <p class="text-[11px] text-slate-500 mt-0.5">by Sarah Martinez</p>
+                                        <div class="bg-slate-50 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-800 mt-2">
+                                            I'll be helping you with this. Let me review your issue.
+                                        </div>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500">May 18, 2:45 PM</span>
+                                </div>
+                            </div>
+
+                            <div class="relative">
+                                <div class="absolute -left-[21px] mt-0.5 bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                    <i class="fa-regular fa-comment"></i>
+                                </div>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Comment added</h4>
+                                        <p class="text-[11px] text-slate-500 mt-0.5">by Sarah Martinez</p>
+                                        <div class="bg-slate-50 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-800 mt-2">
+                                            The issue is likely that you're setting state after an async operation completes, but the component has already unmounted. Let's set up a call to walk through the solution.
+                                        </div>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500">May 18, 3:00 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
+                        <div class="relative">
+                            <textarea rows="2" placeholder="Write a comment..." class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
+                            <div class="absolute right-3 bottom-3">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1.5 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-md shadow-blue-600/10">
+                                    <i class="fa-regular fa-paper-plane text-[10px]"></i>
+                                    <span>Send</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4">
+                        <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Assigned Tutor</h4>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-400">
+                                S
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-semibold text-slate-900 dark:text-white">Sarah Martinez</h4>
+                                <p class="text-[11px] text-slate-400 dark:text-slate-500">Tutor</p>
+                            </div>
+                        </div>
+                        <button class="w-full bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center space-x-2 shadow-sm dark:shadow-none">
+                            <i class="fa-regular fa-message text-xs"></i>
+                            <span>Message Tutor</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                        <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
+                        <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2 shadow-md shadow-emerald-600/10">
+                            <i class="fa-regular fa-circle-check text-sm"></i>
+                            <span>Mark as Resolved</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 
     <script>
         const toggleBtn = document.getElementById('dark-mode-toggle');
@@ -274,7 +502,6 @@
         const modeIcon = document.getElementById('mode-icon');
         const htmlEl = document.documentElement;
 
-        // Dark mode logical setup
         toggleBtn.addEventListener('click', () => {
             if (htmlEl.classList.contains('dark')) {
                 htmlEl.classList.remove('dark');
@@ -293,7 +520,6 @@
             }
         });
 
-        // Functionality bsh t7l o tsdd l-modal smoothly
         const modal = document.getElementById('request-modal');
         const modalCard = document.getElementById('modal-card');
 
@@ -309,9 +535,33 @@
             modalCard.classList.add('scale-95');
         }
 
-        // Kat-sd l-modal ila klikiti tbra dialha
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
+        });
+
+
+        // كود المودال 2 الخاص بـ View Details
+        const detailsModal = document.getElementById('details-modal');
+        const detailsCard = document.getElementById('details-card');
+
+        function openDetailsModal() {
+            detailsModal.classList.remove('opacity-0', 'pointer-events-none');
+            detailsCard.classList.remove('scale-95');
+            detailsCard.classList.add('scale-100');
+        }
+
+        function closeModalDetails() { 
+            detailsModal.classList.add('opacity-0', 'pointer-events-none');
+            detailsCard.classList.remove('scale-100');
+            detailsCard.classList.add('scale-95');
+        }
+
+        function closeDetailsModal() {
+            closeModalDetails();
+        }
+
+        detailsModal.addEventListener('click', (e) => {
+            if (e.target === detailsModal) closeModalDetails();
         });
     </script>
 </body>
