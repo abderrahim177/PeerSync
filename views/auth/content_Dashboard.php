@@ -96,7 +96,7 @@ function timeAgo($timestamp) {
         <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
             <div class="space-y-1">
                 <p class="text-slate-400 dark:text-slate-500 text-xs font-semibold tracking-wide">Resolved</p>
-                <p class="text-3xl font-bold text-slate-900 dark:text-white"><?= $stats['resolved']; ?></p>
+                <p id="stats-resolved" class="text-3xl font-bold text-slate-900 dark:text-white"><?= $stats['resolved']; ?></p>
                 <p class="text-xs text-emerald-500 font-medium">Completed</p>
             </div>
             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
@@ -192,7 +192,7 @@ function timeAgo($timestamp) {
                                 </span>
                                 <span class="flex items-center"><i class="fa-regular fa-clock mr-1.5"></i><?= timeAgo($request['created_at']); ?></span>
                             </div>
-                            <button onclick="openDetailsModal(this)" 
+                            <button data-id="<?= $request['id'] ?>" onclick="openDetailsModal(this)" 
                         data-id="<?= $request['id']; ?>"
                         data-title="<?= htmlspecialchars($request['title']); ?>"
                         data-desc="<?= htmlspecialchars($request['description']); ?>"

@@ -141,10 +141,11 @@ $stats        = $helpRepo->getRequestStats();
                             <span>Espace Tuteur</span>
                         </a>
 
-                        <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200 transition">
-                            <i class="fa-regular fa-star text-base w-4 text-center"></i>
-                            <span>Reviews & Ratings</span>
-                        </a>
+                       <a href="?section=reviews" 
+                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition <?= ($section === 'reviews') ? 'bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">                       
+                        <i class="<?= ($section === 'reviews') ? 'fa-solid' : 'fa-regular' ?> fa-star text-base w-4 text-center"></i>                      
+                        <span>Reviews & Ratings</span>
+                    </a>
                     </nav>
                 </div>
             </div>
@@ -224,10 +225,12 @@ $stats        = $helpRepo->getRequestStats();
         </header>
 
         <!-- DYNAMIC CONTENT -->
-        <?php if ($section === 'tutor'): ?>
+      <?php if ($section === 'tutor'): ?>
     <?php include __DIR__ . '/Content_Tutor.php'; ?>
 <?php elseif ($section === 'profile'): ?>
     <?php include __DIR__ . '/profile.php'; ?>
+<?php elseif ($section === 'reviews'): ?>
+    <?php include __DIR__ . '/reviews.php'; ?>
 <?php else: ?>
     <?php include __DIR__ . '/Content_dashboard.php'; ?>
 <?php endif; ?>
@@ -419,7 +422,7 @@ $stats        = $helpRepo->getRequestStats();
             <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(5)"></i>
         </div>
 
-        <button onclick="submitRating()" class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold py-2 rounded-xl text-[11px] transition border-0 cursor-pointer">
+        <button name="submit" onclick="submitRating()" class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold py-2 rounded-xl text-[11px] transition border-0 cursor-pointer">
             Submit Review
         </button>
     </div>
@@ -660,6 +663,7 @@ window.closeDetailsModal = function() {
                 let isTechValid = techSelect.value !== "";
                 let isDescValid = descInput.value.trim() !== "";
 
+                // إظهار أو إخفاء رسائل الخطأ لكل حقل
                 if (titleInput.value.trim() === "" && titleInput === document.activeElement) {
                     titleError.classList.remove("hidden");
                 } else if (titleInput.value.trim() !== "") {
