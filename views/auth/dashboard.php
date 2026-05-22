@@ -99,6 +99,7 @@ $stats        = $helpRepo->getRequestStats();
                     <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mb-2">Main</p>
                     <nav class="space-y-0.5">
                         <!-- Dashboard link -->
+                        
                         <a href="?section=dashboard" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition
                             <?= $section === 'dashboard' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
                             <div class="flex items-center space-x-3">
@@ -106,7 +107,13 @@ $stats        = $helpRepo->getRequestStats();
                                 <span>Dashboard</span>
                             </div>
                         </a>
-
+                        <a href="?section=profile" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition
+                            <?= $section === 'profile' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-regular fa-user text-base w-4 text-center"></i>
+                                <span>My Profile</span>
+                            </div>
+                        </a>
                         <button onclick="openModal()" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200 transition text-left">
                             <i class="fa-solid fa-circle-plus text-base w-4 text-center"></i>
                             <span>New Request</span>
@@ -218,11 +225,12 @@ $stats        = $helpRepo->getRequestStats();
 
         <!-- DYNAMIC CONTENT -->
         <?php if ($section === 'tutor'): ?>
-            <?php include __DIR__ . '/Content_Tutor.php'; ?>
-        <?php else: ?>
-            <?php include __DIR__ . '/Content_dashboard.php'; ?>
-        <?php endif; ?>
-    </main>
+    <?php include __DIR__ . '/Content_Tutor.php'; ?>
+<?php elseif ($section === 'profile'): ?>
+    <?php include __DIR__ . '/profile.php'; ?>
+<?php else: ?>
+    <?php include __DIR__ . '/Content_dashboard.php'; ?>
+<?php endif; ?>
 
     <!-- MODAL: New Request -->
     <div id="request-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
