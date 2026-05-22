@@ -401,18 +401,94 @@ $stats        = $helpRepo->getRequestStats();
                 </div>
 
                 <div id="actions-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-                    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
-                    <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2">
-                        <i class="fa-regular fa-circle-check text-sm"></i>
-                        <span>Mark as Resolved</span>
-                    </button>
-                </div>
+    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
+    
+    <button id="resolve-btn" onclick="handleResolveRequest()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2 border-0 cursor-pointer">
+        <i id="resolve-icon" class="fa-regular fa-circle-check text-sm"></i>
+        <span id="resolve-text">Mark as Resolved</span>
+    </button>
+
+    <div id="rating-card" class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out border-t border-transparent space-y-3 pt-0">
+        <h5 class="text-xs font-semibold text-slate-700 dark:text-slate-300">Rate this session :</h5>
+        
+        <div class="flex items-center space-x-1.5 justify-center py-1">
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(1)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(2)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(3)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(4)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(5)"></i>
+        </div>
+
+        <button onclick="submitRating()" class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold py-2 rounded-xl text-[11px] transition border-0 cursor-pointer">
+            Submit Review
+        </button>
+    </div>
+</div>
             </div>
         </div>
     </div>
 </div>
 
     <script>
+        // Fonction mni kayclikki 3la Mark as Resolved
+window.handleResolveRequest = function() {
+    const btn = document.getElementById('resolve-btn');
+    const icon = document.getElementById('resolve-icon');
+    const text = document.getElementById('resolve-text');
+    const ratingCard = document.getElementById('rating-card');
+
+    if (!btn) return;
+
+    // 1. Tbdel l-design dial l-button (wllat Resolved o Disabled)
+    btn.disabled = true;
+    btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700', 'cursor-pointer');
+    btn.classList.add('bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-400', 'border', 'border-emerald-500/20', 'cursor-not-allowed');
+    
+    // 2. Tbdel l-icon o l-kitaba
+    if (icon) {
+        icon.className = "fa-solid fa-circle-check text-sm"; // rj3at solid icon
+    }
+    if (text) {
+        text.textContent = "Resolved";
+    }
+
+    // 3. Affichi l-Card dial rating b-animation smooth
+    if (ratingCard) {
+        ratingCard.classList.remove('max-h-0', 'opacity-0');
+        ratingCard.classList.add('max-h-40', 'opacity-100', 'border-slate-200', 'dark:border-slate-800', 'pt-3');
+    }
+};
+
+// Fonction bach t-gérer l-clik 3la njmat (Rating)
+let currentRating = 0;
+window.setRating = function(ratingValue) {
+    currentRating = ratingValue;
+    const stars = document.querySelectorAll('.star-btn');
+    
+    stars.forEach((star, index) => {
+        if (index < ratingValue) {
+            // Njmzat li mseltin yvlliou solid o sfar
+            star.className = "fa-solid fa-star text-xl text-amber-400 cursor-pointer hover:scale-110 transition star-btn";
+        } else {
+            // Njmzat l-ba9iyin dima empty
+            star.className = "fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn";
+        }
+    });
+};
+
+// Action dial submission (b7al ila ghadi tsiftha l-baza dyal l-ma3loumat)
+window.submitRating = function() {
+    if (currentRating === 0) {
+        alert("Please select a star rating first!");
+        return;
+    }
+    alert("Thank you for your rating of " + currentRating + " stars!");
+    
+    // Hna t9der t-gérer l-ferman dial modal aw tsiftha l-backend b-Fetch API
+    if (typeof closeDetailsModal === 'function') {
+        closeDetailsModal();
+    }
+};
         // Dark mode toggle
         // Dark mode toggle — persist in localStorage
         const toggleBtn = document.getElementById('dark-mode-toggle');
@@ -584,7 +660,6 @@ window.closeDetailsModal = function() {
                 let isTechValid = techSelect.value !== "";
                 let isDescValid = descInput.value.trim() !== "";
 
-                // إظهار أو إخفاء رسائل الخطأ لكل حقل
                 if (titleInput.value.trim() === "" && titleInput === document.activeElement) {
                     titleError.classList.remove("hidden");
                 } else if (titleInput.value.trim() !== "") {
@@ -603,7 +678,6 @@ window.closeDetailsModal = function() {
                     descError.classList.add("hidden");
                 }
 
-                // تحويل وتغيير ستايل الزر بناءً على صحة البيانات كامة
                 if (isTitleValid && isTechValid && isDescValid) {
                     submitBtn.removeAttribute("disabled");
                     submitBtn.className = "px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition shadow-md shadow-blue-500/10 cursor-pointer";
