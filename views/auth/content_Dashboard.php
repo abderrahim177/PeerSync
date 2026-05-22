@@ -280,72 +280,88 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // logique view details 
 function openDetailsModal(button) {
+    // 1. جلب البيانات مع تحويل الـ status للحروف الكبيرة تفادياً لأي ماتش غالط
     const id = button.getAttribute('data-id');
     const title = button.getAttribute('data-title');
     const desc = button.getAttribute('data-desc');
-    const status = button.getAttribute('data-status');
+    const status = button.getAttribute('data-status') ? button.getAttribute('data-status').toUpperCase() : 'PENDING';
     const tech = button.getAttribute('data-tech');
     const date = button.getAttribute('data-date');
     const tutorName = button.getAttribute('data-tutor');
     const userName = button.getAttribute('data-user');
 
-    document.getElementById('detail-title').textContent = title;
-    document.getElementById('detail-desc').innerHTML = `<p>${desc}</p>`;
-    document.getElementById('detail-date').textContent = date;
-    document.getElementById('detail-badge-tech').textContent = tech;
-    document.getElementById('timeline-user-name').textContent = userName;
+    // 2. تعبئة النصوص
+    if(document.getElementById('detail-title')) document.getElementById('detail-title').textContent = title;
+    if(document.getElementById('detail-desc')) document.getElementById('detail-desc').innerHTML = `<p>${desc}</p>`;
+    if(document.getElementById('detail-date')) document.getElementById('detail-date').textContent = date;
+    if(document.getElementById('detail-badge-tech')) document.getElementById('detail-badge-tech').textContent = tech;
+    if(document.getElementById('timeline-user-name')) document.getElementById('timeline-user-name').textContent = userName;
 
+    // 3. التحكم ف الـ Badge ديال الـ Status (مسح الكلاسات القديمة وتعويضها ديناميكياً)
     const statusBadge = document.getElementById('detail-badge-status');
-    statusBadge.textContent = status.charAt(0) + status.slice(1).toLowerCase();
-    
-    statusBadge.className = "text-[11px] px-2.5 py-0.5 rounded-md font-medium ";
-    if (status === 'PENDING') {
-        statusBadge.classList.add('bg-amber-500/10', 'text-amber-600', 'dark:text-amber-500');
-    } else if (status === 'ASSIGNED') {
-        statusBadge.classList.add('bg-blue-500/10', 'text-blue-600', 'dark:text-blue-400');
-    } else if (status === 'RESOLVED') {
-        statusBadge.classList.add('bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-500');
+    if (statusBadge) {
+        statusBadge.textContent = status.charAt(0) + status.slice(1).toLowerCase();
+        // إعادة تعيين الكلاسات الأساسية مع البوردر
+        statusBadge.className = "text-[11px] px-2.5 py-0.5 rounded-full font-semibold border ";
+        
+        if (status === 'PENDING') {
+            statusBadge.className += "bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20";
+        } else if (status === 'ASSIGNED') {
+            statusBadge.className += "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
+        } else if (status === 'RESOLVED') {
+            statusBadge.className += "bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 border-emerald-500/20";
+        }
     }
 
+    // 4. التحكم ف كروت الـ Tutor والـ Timeline
     const tutorInfoCard = document.getElementById('tutor-info-card');
     const noTutorCard = document.getElementById('no-tutor-card');
     const timelineTutor = document.getElementById('timeline-tutor-assigned');
     const actionsCard = document.getElementById('actions-card');
 
     if (tutorName && tutorName.trim() !== '') {
-        tutorInfoCard.classList.remove('hidden');
-        noTutorCard.classList.add('hidden');
+        if(tutorInfoCard) tutorInfoCard.classList.remove('hidden');
+        if(noTutorCard) noTutorCard.classList.add('hidden');
         if(timelineTutor) timelineTutor.classList.remove('hidden');
         
-        document.getElementById('tutor-full-name').textContent = tutorName;
-        document.getElementById('timeline-tutor-name').textContent = tutorName;
-        document.getElementById('tutor-initial').textContent = tutorName.charAt(0).toUpperCase();
+        if(document.getElementById('tutor-full-name')) document.getElementById('tutor-full-name').textContent = tutorName;
+        if(document.getElementById('timeline-tutor-name')) document.getElementById('timeline-tutor-name').textContent = tutorName;
+        if(document.getElementById('tutor-initial')) document.getElementById('tutor-initial').textContent = tutorName.charAt(0).toUpperCase();
     } else {
-        tutorInfoCard.classList.add('hidden');
-        noTutorCard.classList.remove('hidden');
+        if(tutorInfoCard) tutorInfoCard.classList.add('hidden');
+        if(noTutorCard) noTutorCard.classList.remove('hidden');
         if(timelineTutor) timelineTutor.classList.add('hidden');
     }
 
-    if (status === 'RESOLVED') {
-        actionsCard.classList.add('hidden');
-    } else {
-        actionsCard.classList.remove('hidden');
+    // 5. زر الأكشن: يبان *فقط* يلا كان الـ Request مأسايني (ASSIGNED). يلا كان Pending أو Resolved يتخبا.
+    if (actionsCard) {
+        if (status === 'ASSIGNED') {
+            actionsCard.classList.remove('hidden');
+        } else {
+            actionsCard.classList.add('hidden');
+        }
     }
 
+    // 6. إظهار الـ Modal ونقلها للـ body باش تفادى مشكل الـ Overflow والـ fixed المزموت
     const modal = document.getElementById('details-modal');
     const card = document.getElementById('details-card');
     
-    modal.classList.remove('opacity-0', 'pointer-events-none');
-    card.classList.remove('scale-95');
-    card.classList.add('scale-100');
+    if (modal && card) {
+        document.body.appendChild(modal); // سطر سحري كيحل مشكل الحجب
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+    }
 }
 
 function closeDetailsModal() {
     const modal = document.getElementById('details-modal');
     const card = document.getElementById('details-card');
     
-    modal.classList.add('opacity-0', 'pointer-events-none');
-    card.classList.remove('scale-100');
-    card.classList.add('scale-95');
+    if (modal && card) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+    }
 }
 </script>

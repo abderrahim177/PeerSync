@@ -474,7 +474,91 @@ $stats        = $helpRepo->getRequestStats();
         detailsModal.addEventListener('click', (e) => {
             if (e.target === detailsModal) closeDetailsModal();
         });
+        // detail afichage modal
+        // Fonction pour ouvrir le modal des détails avec l'injection des données
+window.openDetailsModal = function(button) {
+    const modal = document.getElementById('details-modal');
+    const card = document.getElementById('details-card');
+    
+    if (!modal || !card) return;
 
+    // 1. Récupération des données depuis le bouton cliqué
+    const title = button.getAttribute('data-title') || '';
+    const desc = button.getAttribute('data-desc') || '';
+    const status = (button.getAttribute('data-status') || '').toUpperCase();
+    const tech = button.getAttribute('data-tech') || 'Unknown';
+    const date = button.getAttribute('data-date') || '';
+    const tutorName = button.getAttribute('data-tutor') || '';
+    const studentName = button.getAttribute('data-user') || 'Student';
+
+    // 2. Injection des données basiques dans le HTML du modal
+    document.getElementById('detail-title').textContent = title;
+    document.getElementById('detail-desc').textContent = desc;
+    document.getElementById('detail-date').textContent = date;
+    document.getElementById('detail-badge-tech').textContent = tech;
+    document.getElementById('detail-badge-status').textContent = status.charAt(0) + status.slice(1).toLowerCase();
+    
+    // Mettre à jour le nom de l'étudiant dans la timeline
+    const timelineUser = document.getElementById('timeline-user-name');
+    if (timelineUser) timelineUser.textContent = `By ${studentName}`;
+
+    // 3. Gestion dynamique des Badges de statut (Couleurs)
+    const statusBadge = document.getElementById('detail-badge-status');
+    // Nettoyer les anciennes classes de couleur
+    statusBadge.className = "text-[11px] px-2.5 py-0.5 rounded-md font-medium border";
+    
+    if (status === 'RESOLVED') {
+        statusBadge.classList.add('bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-400', 'border-emerald-500/20');
+    } else if (status === 'ASSIGNED' || status === 'IN PROGRESS') {
+        statusBadge.classList.add('bg-blue-500/10', 'text-blue-600', 'dark:text-blue-400', 'border-blue-500/20');
+    } else { // PENDING
+        statusBadge.classList.add('bg-amber-500/10', 'text-amber-600', 'dark:text-amber-400', 'border-amber-500/20');
+    }
+
+    // 4. Gestion de la visibilité des cartes du tuteur (Assigned vs Awaiting)
+    const tutorCard = document.getElementById('tutor-info-card');
+    const noTutorCard = document.getElementById('no-tutor-card');
+    const timelineTutor = document.getElementById('timeline-tutor-assigned');
+
+    if (tutorName && tutorName.trim() !== "") {
+        // Si un tuteur est assigné
+        if (tutorCard) tutorCard.classList.remove('hidden');
+        if (noTutorCard) noTutorCard.classList.add('hidden');
+        if (timelineTutor) timelineTutor.classList.remove('hidden');
+        
+        // Injecter le nom et la première lettre
+        const tutorFullNameElem = document.getElementById('tutor-full-name');
+        const tutorInitialElem = document.getElementById('tutor-initial');
+        const timelineTutorNameElem = document.getElementById('timeline-tutor-name');
+
+        if (tutorFullNameElem) tutorFullNameElem.textContent = tutorName;
+        if (timelineTutorNameElem) timelineTutorNameElem.textContent = `Assigned to ${tutorName}`;
+        if (tutorInitialElem) tutorInitialElem.textContent = tutorName.charAt(0).toUpperCase();
+    } else {
+        // Si aucun tuteur n'est encore assigné
+        if (tutorCard) tutorCard.classList.add('hidden');
+        if (noTutorCard) noTutorCard.classList.remove('hidden');
+        if (timelineTutor) timelineTutor.classList.add('hidden'); // masquer de la timeline
+    }
+
+    // 5. Affichage du Modal avec l'animation Tailwind original
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    card.classList.remove('scale-95');
+    card.classList.add('scale-100');
+};
+
+// Fonction pour fermer le modal des détails
+window.closeDetailsModal = function() {
+    const modal = document.getElementById('details-modal');
+    const card = document.getElementById('details-card');
+    
+    if (!modal || !card) return;
+
+    // Cacher le modal et remettre l'effet scale
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    card.classList.remove('scale-100');
+    card.classList.add('scale-95');
+};
         // message of validation
 
         document.addEventListener("DOMContentLoaded", function() {
