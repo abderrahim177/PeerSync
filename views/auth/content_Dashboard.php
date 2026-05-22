@@ -72,7 +72,6 @@ function timeAgo($timestamp) {
         </button>
     </div>
 
-    <!-- Stats cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">
             <div class="space-y-1">
@@ -117,39 +116,61 @@ function timeAgo($timestamp) {
         </div>
     </div>
 
-    <!-- Recent Requests -->
     <div class="space-y-4">
         <div class="flex items-center justify-between">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-wide">Recent Requests</h3>
-            <div class="flex items-center space-x-3 w-72">
+            <div class="flex items-center space-x-3 w-72 relative">
                 <div class="relative flex-1">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
                     </span>
-                    <input type="text" placeholder="Search requests..." class="w-full bg-white dark:bg-[#111936] text-slate-800 dark:text-slate-300 pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 text-xs placeholder-slate-400">
+                    <input type="text" id="request-search" placeholder="Search requests..." class="w-full bg-white dark:bg-[#111936] text-slate-800 dark:text-slate-300 pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 text-xs placeholder-slate-400">
                 </div>
-                <button class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] p-2.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition flex items-center justify-center h-9 w-9 flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 8.293A1 1 0 013 7.586V4z"></path>
-                    </svg>
-                </button>
+                
+                <div class="relative">
+                    <button id="filter-btn" class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] p-2.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition flex items-center justify-center h-9 w-9 flex-shrink-0 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 8.293A1 1 0 013 7.586V4z"></path>
+                        </svg>
+                    </button>
+
+                    <div id="filter-dropdown" class="absolute right-0 mt-2 w-40 bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-xl shadow-xl py-1.5 z-50 opacity-0 pointer-events-none scale-95 transition-all duration-200">
+                        <button onclick="filterStatus('ALL')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#0b132b] transition flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                            <span>All Requests</span>
+                        </button>
+                        <button onclick="filterStatus('PENDING')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#0b132b] transition flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                            <span>Pending</span>
+                        </button>
+                        <button onclick="filterStatus('ASSIGNED')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#0b132b] transition flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            <span>Assigned</span>
+                        </button>
+                        <button onclick="filterStatus('RESOLVED')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#0b132b] transition flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>Resolved</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div id="requests-container" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <?php if (empty($requests)): ?>
-                <p class="text-slate-500 dark:text-slate-400 text-sm col-span-2 text-center py-4">No help requests found.</p>
+                <p id="no-requests-msg" class="text-slate-500 dark:text-slate-400 text-sm col-span-2 text-center py-4">No help requests found.</p>
             <?php else: ?>
                 <?php foreach ($requests as $request): ?>
-                    <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 space-y-4 shadow-sm relative hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col justify-between">
+                    <?php $status = strtoupper($request['status']); ?>
+                    
+                    <div data-status="<?= $status; ?>" class="request-card bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 space-y-4 shadow-sm relative hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col justify-between">
                         <div class="space-y-2">
                             <div class="flex items-start justify-between">
-                                <h4 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
+                                <h4 class="text-base font-bold text-slate-900 dark:text-white leading-snug class-title">
                                     <?= htmlspecialchars($request['title']); ?>
                                 </h4>
                                 <?php
-                                $status = strtoupper($request['status']);
-                                $statusClass = "bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20";
+                                $statusClass = "bg-amber-800/10  text-amber-600 dark:text-amber-500 border-amber-500/20";
                                 if ($status === 'ASSIGNED') {
                                     $statusClass = "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
                                 } elseif ($status === 'RESOLVED') {
@@ -160,7 +181,7 @@ function timeAgo($timestamp) {
                                     <?= ucfirst(strtolower($status)); ?>
                                 </span>
                             </div>
-                            <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                            <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed class-desc">
                                 <?= htmlspecialchars($request['description']); ?>
                             </p>
                         </div>
@@ -171,16 +192,160 @@ function timeAgo($timestamp) {
                                 </span>
                                 <span class="flex items-center"><i class="fa-regular fa-clock mr-1.5"></i><?= timeAgo($request['created_at']); ?></span>
                             </div>
-                            <button onclick="openDetailsModal()" class="text-blue-600 dark:text-blue-400 font-medium hover:underline inline-flex items-center space-x-1 bg-transparent border-0 cursor-pointer">
-
-                                <span>View details</span>
-                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                            </button>
+                            <button onclick="openDetailsModal(this)" 
+                        data-id="<?= $request['id']; ?>"
+                        data-title="<?= htmlspecialchars($request['title']); ?>"
+                        data-desc="<?= htmlspecialchars($request['description']); ?>"
+                        data-status="<?= $status; ?>"
+                        data-tech="<?= htmlspecialchars($request['skill_name'] ?? 'Unknown'); ?>"
+                        data-date="<?= timeAgo($request['created_at']); ?>"
+                        data-tutor="<?= htmlspecialchars($request['tutor_name'] ?? ''); ?>"
+                        data-user="<?= htmlspecialchars($request['user_name'] ?? 'Student'); ?>"
+                        class="text-blue-600 dark:text-blue-400 font-medium hover:underline inline-flex items-center space-x-1 bg-transparent border-0 cursor-pointer">
+                    <span>View details</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
                         </div>
                     </div>
                 <?php endforeach; ?>
+                
+                <p id="js-no-requests-msg" class="text-slate-500 dark:text-slate-400 text-sm col-span-2 text-center py-4 hidden">No requests found matching this filter.</p>
             <?php endif; ?>
         </div>
     </div>
 
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const filterBtn = document.getElementById('filter-btn');
+    const filterDropdown = document.getElementById('filter-dropdown');
+    const searchInput = document.getElementById('request-search');
+    
+    let currentStatusFilter = 'ALL';
+
+    filterBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        filterDropdown.classList.toggle('opacity-0');
+        filterDropdown.classList.toggle('pointer-events-none');
+        filterDropdown.classList.toggle('scale-95');
+        filterDropdown.classList.toggle('scale-100');
+    });
+
+    document.addEventListener('click', function () {
+        filterDropdown.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+        filterDropdown.classList.remove('scale-100');
+    });
+
+    window.filterStatus = function(status) {
+        currentStatusFilter = status;
+        applyFilters();
+    }
+
+    if(searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
+
+    function applyFilters() {
+        const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
+        const cards = document.querySelectorAll('.request-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const cardStatus = card.getAttribute('data-status');
+            const title = card.querySelector('.class-title')?.textContent.toLowerCase() || "";
+            const desc = card.querySelector('.class-desc')?.textContent.toLowerCase() || "";
+            
+            const matchesStatus = (currentStatusFilter === 'ALL' || cardStatus === currentStatusFilter);
+            const matchesSearch = (title.includes(searchText) || desc.includes(searchText));
+
+            if (matchesStatus && matchesSearch) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        const jsMsg = document.getElementById('js-no-requests-msg');
+        if(jsMsg) {
+            if (visibleCount === 0) {
+                jsMsg.classList.remove('hidden');
+            } else {
+                jsMsg.classList.add('hidden');
+            }
+        }
+    }
+});
+
+// logique view details 
+function openDetailsModal(button) {
+    const id = button.getAttribute('data-id');
+    const title = button.getAttribute('data-title');
+    const desc = button.getAttribute('data-desc');
+    const status = button.getAttribute('data-status');
+    const tech = button.getAttribute('data-tech');
+    const date = button.getAttribute('data-date');
+    const tutorName = button.getAttribute('data-tutor');
+    const userName = button.getAttribute('data-user');
+
+    document.getElementById('detail-title').textContent = title;
+    document.getElementById('detail-desc').innerHTML = `<p>${desc}</p>`;
+    document.getElementById('detail-date').textContent = date;
+    document.getElementById('detail-badge-tech').textContent = tech;
+    document.getElementById('timeline-user-name').textContent = userName;
+
+    const statusBadge = document.getElementById('detail-badge-status');
+    statusBadge.textContent = status.charAt(0) + status.slice(1).toLowerCase();
+    
+    statusBadge.className = "text-[11px] px-2.5 py-0.5 rounded-md font-medium ";
+    if (status === 'PENDING') {
+        statusBadge.classList.add('bg-amber-500/10', 'text-amber-600', 'dark:text-amber-500');
+    } else if (status === 'ASSIGNED') {
+        statusBadge.classList.add('bg-blue-500/10', 'text-blue-600', 'dark:text-blue-400');
+    } else if (status === 'RESOLVED') {
+        statusBadge.classList.add('bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-500');
+    }
+
+    const tutorInfoCard = document.getElementById('tutor-info-card');
+    const noTutorCard = document.getElementById('no-tutor-card');
+    const timelineTutor = document.getElementById('timeline-tutor-assigned');
+    const actionsCard = document.getElementById('actions-card');
+
+    if (tutorName && tutorName.trim() !== '') {
+        tutorInfoCard.classList.remove('hidden');
+        noTutorCard.classList.add('hidden');
+        if(timelineTutor) timelineTutor.classList.remove('hidden');
+        
+        document.getElementById('tutor-full-name').textContent = tutorName;
+        document.getElementById('timeline-tutor-name').textContent = tutorName;
+        document.getElementById('tutor-initial').textContent = tutorName.charAt(0).toUpperCase();
+    } else {
+        tutorInfoCard.classList.add('hidden');
+        noTutorCard.classList.remove('hidden');
+        if(timelineTutor) timelineTutor.classList.add('hidden');
+    }
+
+    if (status === 'RESOLVED') {
+        actionsCard.classList.add('hidden');
+    } else {
+        actionsCard.classList.remove('hidden');
+    }
+
+    const modal = document.getElementById('details-modal');
+    const card = document.getElementById('details-card');
+    
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    card.classList.remove('scale-95');
+    card.classList.add('scale-100');
+}
+
+function closeDetailsModal() {
+    const modal = document.getElementById('details-modal');
+    const card = document.getElementById('details-card');
+    
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    card.classList.remove('scale-100');
+    card.classList.add('scale-95');
+}
+</script>

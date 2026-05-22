@@ -29,6 +29,8 @@ $helpRepo = new HelpRequestRepository($dbConnection);
 $technologies = $helpRepo->getAllTechnologies();
 $requests     = $helpRepo->getAllRequests();
 $stats        = $helpRepo->getRequestStats();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="dark">
@@ -296,126 +298,111 @@ $stats        = $helpRepo->getRequestStats();
 
     <!-- MODAL: Details -->
     <div id="details-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-        <div id="details-card" class="bg-white dark:bg-[#0b132b] w-full max-w-4xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300 text-slate-600 dark:text-slate-300">
+    <div id="details-card" class="bg-white dark:bg-[#0b132b] w-full max-w-4xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300 text-slate-600 dark:text-slate-300">
 
-            <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                <button onclick="closeDetailsModal()" class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span>Back to Dashboard</span>
-                </button>
-                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
+        <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <button onclick="closeDetailsModal()" class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </button>
+            <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
 
-            <div class="p-6 overflow-y-auto custom-scrollbar flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 space-y-6">
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">React</span>
-                            <span class="bg-teal-500/10 text-teal-600 dark:text-teal-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">In Progress</span>
-                        </div>
-                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Help with React useEffect cleanup</h2>
-                        <div class="text-slate-600 dark:text-slate-400 space-y-3 text-xs leading-relaxed">
-                            <p>I'm having trouble understanding when and how to properly clean up effects in React. My component keeps throwing memory leak warnings when navigating away from the page.</p>
-                            <p>I've tried returning a cleanup function but I'm not sure if I'm doing it correctly. The warning says 'Can't perform a React state update on an unmounted component'.</p>
-                        </div>
-                        <p class="text-[11px] text-slate-400 dark:text-slate-500 flex items-center"><i class="fa-regular fa-clock mr-1.5"></i>May 18, 2026 at 2:30 PM</p>
+        <div class="p-6 overflow-y-auto custom-scrollbar flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 space-y-6">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <span id="detail-badge-tech" class="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">React</span>
+                        <span id="detail-badge-status" class="text-[11px] px-2.5 py-0.5 rounded-md font-medium">In Progress</span>
                     </div>
+                    <h2 id="detail-title" class="text-xl font-bold text-slate-900 dark:text-white">Help with React useEffect cleanup</h2>
+                    
+                    <div id="detail-desc" class="text-slate-600 dark:text-slate-400 space-y-3 text-xs leading-relaxed">
+                        </div>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500 flex items-center">
+                        <i class="fa-regular fa-clock mr-1.5"></i>
+                        <span id="detail-date">May 18, 2026 at 2:30 PM</span>
+                    </p>
+                </div>
 
-                    <hr class="border-slate-200 dark:border-slate-800">
+                <hr class="border-slate-200 dark:border-slate-800">
 
-                    <div class="space-y-4">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white tracking-wide">Activity Timeline</h3>
-                        <div class="relative pl-6 space-y-6 before:absolute before:bottom-2 before:top-2 before:left-[11px] before:w-[1px] before:bg-slate-200 dark:before:bg-slate-800">
-                            <div class="relative">
-                                <div class="absolute -left-[21px] mt-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-                                    <i class="fa-regular fa-clock"></i>
-                                </div>
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Request created</h4>
-                                        <p class="text-[11px] text-slate-500 mt-0.5"><?= htmlspecialchars($name) ?></p>
-                                    </div>
-                                    <span class="text-[10px] text-slate-400 dark:text-slate-500">May 18, 2:30 PM</span>
-                                </div>
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white tracking-wide">Activity Timeline</h3>
+                    <div class="relative pl-6 space-y-6 before:absolute before:bottom-2 before:top-2 before:left-[11px] before:w-[1px] before:bg-slate-200 dark:before:bg-slate-800">
+                        <div class="relative">
+                            <div class="absolute -left-[21px] mt-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                <i class="fa-regular fa-clock"></i>
                             </div>
-                            <div class="relative">
-                                <div class="absolute -left-[21px] mt-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-                                    <i class="fa-regular fa-user"></i>
-                                </div>
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Tutor assigned</h4>
-                                        <p class="text-[11px] text-slate-500 mt-0.5"><?= htmlspecialchars($tutorName) ?></p>
-                                        <div class="bg-slate-50 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-800 mt-2">
-                                            I'll be helping you with this. Let me review your issue.
-                                        </div>
-                                    </div>
-                                    <span class="text-[10px] text-slate-400 dark:text-slate-500">May 18, 2:45 PM</span>
-                                </div>
-                            </div>
-                            <div class="relative">
-                                <div class="absolute -left-[21px] mt-0.5 bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-                                    <i class="fa-regular fa-comment"></i>
-                                </div>
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Comment added</h4>
-                                        <p class="text-[11px] text-slate-500 mt-0.5">by Sarah Martinez</p>
-                                        <div class="bg-slate-50 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-800 mt-2">
-                                            The issue is likely that you're setting state after an async operation completes, but the component has already unmounted.
-                                        </div>
-                                    </div>
-                                    <span class="text-[10px] text-slate-400 dark:text-slate-500">May 18, 3:00 PM</span>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Request created</h4>
+                                    <p id="timeline-user-name" class="text-[11px] text-slate-500 mt-0.5"></p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="space-y-3 pt-2">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
-
-                        <div class="space-y-2">
-                            <textarea rows="3" placeholder="Write a comment..."
-                                class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
-
-                            <div class="flex justify-end">
-                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-sm">
-                                    <i class="fa-regular fa-paper-plane text-[10px]"></i>
-                                    <span>Send</span>
-                                </button>
+                        
+                        <div id="timeline-tutor-assigned" class="relative">
+                            <div class="absolute -left-[21px] mt-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Tutor assigned</h4>
+                                    <p id="timeline-tutor-name" class="text-[11px] text-slate-500 mt-0.5"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="space-y-5">
-                    <div class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4">
-                        <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Assigned Tutor</h4>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-400">S</div>
-                            <div>
-                                <h4 class="text-xs font-semibold text-slate-900 dark:text-white">Sarah Martinez</h4>
-                                <p class="text-[11px] text-slate-400 dark:text-slate-500">Tutor</p>
-                            </div>
+                <div class="space-y-3 pt-2">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
+                    <div class="space-y-2">
+                        <textarea rows="3" placeholder="Write a comment..." class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
+                        <div class="flex justify-end">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-sm">
+                                <i class="fa-regular fa-paper-plane text-[10px]"></i>
+                                <span>Send</span>
+                            </button>
                         </div>
-                        <button class="w-full bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center space-x-2">
-                            <i class="fa-regular fa-message text-xs"></i>
-                            <span>Message Tutor</span>
-                        </button>
                     </div>
-                    <div class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-                        <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
-                        <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2">
-                            <i class="fa-regular fa-circle-check text-sm"></i>
-                            <span>Mark as Resolved</span>
-                        </button>
+                </div>
+            </div>
+
+            <div class="space-y-5">
+                <div id="tutor-info-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4">
+                    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Assigned Tutor</h4>
+                    <div class="flex items-center space-x-3">
+                        <div id="tutor-initial" class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-400">S</div>
+                        <div>
+                            <h4 id="tutor-full-name" class="text-xs font-semibold text-slate-900 dark:text-white">Sarah Martinez</h4>
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500">Tutor</p>
+                        </div>
                     </div>
+                    <button class="w-full bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center space-x-2">
+                        <i class="fa-regular fa-message text-xs"></i>
+                        <span>Message Tutor</span>
+                    </button>
+                </div>
+                
+                <div id="no-tutor-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-center py-6 hidden">
+                    <p class="text-xs text-slate-400">Awaiting tutor assignment...</p>
+                </div>
+
+                <div id="actions-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
+                    <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2">
+                        <i class="fa-regular fa-circle-check text-sm"></i>
+                        <span>Mark as Resolved</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         // Dark mode toggle
