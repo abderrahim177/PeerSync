@@ -11,17 +11,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dbConnection = $database->connect();
     $repository = new HelpRequestRepository($dbConnection);
 
+    
+    // Confirm & Take Request
+ 
     if (isset($_POST['assign'])) {
         $requestId = isset($_POST['request_id']) ? intval($_POST['request_id']) : 0;
+        $userName  = isset($_POST['user_name']) ? trim($_POST['user_name']) : '';
 
-        if ($requestId === 0) {
+      
+        if ($requestId === 0 || empty($userName)) {
             header('Location: /peersync/views/auth/dashboard.php?error=invalid_request');
             exit();
         }
-
-        $success = $repository->assignRequest($requestId);
+        $success = $repository->assignRequest($requestId, $userName);
 
         if ($success) {
+            // save name in session storage
+            $_SESSION['user_name'] = $userName;
+            
             header('Location: /peersync/views/auth/dashboard.php?section=tutor&success=request_assigned');
         } else {
             header('Location: /peersync/views/auth/dashboard.php?error=db_error');
@@ -29,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+   
+    // Create New Request
+ 
     $title       = isset($_POST['title']) ? trim($_POST['title']) : '';
     $skillId     = isset($_POST['technology']) ? intval($_POST['technology']) : 0;
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';
@@ -39,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
     
-
     $success = $repository->createRequest($title, $skillId, $description, $userId);
 
     if ($success) {

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/login-process.php';
 $name = $_SESSION['user_name'];
 $role = $_SESSION['user_role'];
+$tutorName = $_SESSION['user_name'];
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -346,7 +347,7 @@ $stats        = $helpRepo->getRequestStats();
                                 <div class="flex justify-between items-start">
                                     <div>
                                         <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Tutor assigned</h4>
-                                        <p class="text-[11px] text-slate-500 mt-0.5">by Sarah Martinez</p>
+                                        <p class="text-[11px] text-slate-500 mt-0.5"><?= htmlspecialchars($tutorName) ?></p>
                                         <div class="bg-slate-50 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-800 mt-2">
                                             I'll be helping you with this. Let me review your issue.
                                         </div>

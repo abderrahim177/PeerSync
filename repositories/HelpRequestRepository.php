@@ -70,17 +70,22 @@ class HelpRequestRepository
             return ['total' => 0, 'pending' => 0, 'assigned' => 0, 'resolved' => 0];
         }
     }
-    public function assignRequest(int $requestId): bool
-    {
-        try {
-            $query = "UPDATE help_requests SET status = 'ASSIGNED' WHERE id = :id";
-            $stmt = $this->db->prepare($query);
+   public function assignRequest(int $requestId, string $tutorName): bool
+{
+    try {
+        
+        $query = "UPDATE help_requests 
+                  SET status = 'ASSIGNED', tutor_name = :tutor_name 
+                  WHERE id = :id AND status = 'PENDING'"; 
+        
+        $stmt = $this->db->prepare($query);
 
-            return $stmt->execute([
-                ':id' => $requestId
-            ]);
-        } catch (PDOException $e) {
-            return false;
-        }
+        return $stmt->execute([
+            ':id'         => $requestId,
+            ':tutor_name' => $tutorName 
+        ]);
+    } catch (PDOException $e) {
+        return false;
     }
+}
 }
