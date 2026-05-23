@@ -89,4 +89,17 @@ public function assignRequest(int $requestId, string $tutorName): bool
         return false;
     }
 }
+
+public function getResolvedRequests() {
+    try {
+        // La-query l-asasia bach tjbed ga3 l-columns nishan mn help_request
+        $query = "SELECT * FROM help_requests WHERE status = 'RESOLVED'";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch(PDOException $e) {
+        return false;
+    }
+}
 }
