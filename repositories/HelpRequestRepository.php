@@ -1,5 +1,4 @@
 <?php
-// app/repositories/HelpRequestRepository.php
 
 class HelpRequestRepository
 {
@@ -12,18 +11,16 @@ class HelpRequestRepository
    public function createRequest(string $title, int $skillId, string $description, int $userId): bool
 {
     try {
-        // 1. 9addna smiyat les colonnes (skill_id, userId) o les placeholders (:skill_id, :user_id)
         $query = "INSERT INTO help_requests (title, description, status, skill_id, userId, created_at) 
                   VALUES (:title, :description, 'PENDING', :skill_id, :user_id, NOW())";
 
         $stmt = $this->db->prepare($query);
 
-        // 2. Koulchi matché daba exact m3a la requête l'fo9aniya
         return $stmt->execute([
             ':title'       => $title,
             ':description' => $description,
             ':skill_id'    => $skillId,
-            ':user_id'     => $userId // <--- daba matché 100% m3a :user_id li f SQL
+            ':user_id'     => $userId 
         ]);
     } catch (PDOException $e) {
         echo "Database Error: " . $e->getMessage();
@@ -92,7 +89,6 @@ public function assignRequest(int $requestId, string $tutorName): bool
 
 public function getResolvedRequests() {
     try {
-        // La-query l-asasia bach tjbed ga3 l-columns nishan mn help_request
         $query = "SELECT * FROM help_requests WHERE status = 'RESOLVED'";
         $stmt = $this->db->prepare($query);
         $stmt->execute();

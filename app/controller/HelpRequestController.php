@@ -3,7 +3,6 @@ require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../../repositories/HelpRequestRepository.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 1. Dima l'bdaya b l'session bach t9ra ola t-sauvegarder l'user data mzyan
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -12,9 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dbConnection = $database->connect();
     $repository = new HelpRequestRepository($dbConnection);
 
-    // ==========================================
     // ACTION 1: Confirm & Take Request (Tutor)
-    // ==========================================
     if (isset($_POST['assign'])) {
         $requestId = isset($_POST['request_id']) ? intval($_POST['request_id']) : 0;
         $userName  = isset($_POST['user_name']) ? trim($_POST['user_name']) : '';
@@ -39,9 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // ==========================================
     // ACTION 2: Create New Request (Student)
-    // ==========================================
     $title       = isset($_POST['title']) ? trim($_POST['title']) : '';
     $skillId     = isset($_POST['technology']) ? intval($_POST['technology']) : 0;
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';
