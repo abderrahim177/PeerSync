@@ -9,19 +9,21 @@ class HelpRequestRepository
     {
         $this->db = $databaseConnection;
     }
-    public function createRequest(string $title, int $skillId, string $description, int $userId): bool
+   public function createRequest(string $title, int $skillId, string $description, int $userId): bool
 {
     try {
-        $query = "INSERT INTO help_requests (title, description, status, skill_id, user_id, created_at) 
+        // 1. 9addna smiyat les colonnes (skill_id, userId) o les placeholders (:skill_id, :user_id)
+        $query = "INSERT INTO help_requests (title, description, status, skill_id, userId, created_at) 
                   VALUES (:title, :description, 'PENDING', :skill_id, :user_id, NOW())";
 
         $stmt = $this->db->prepare($query);
 
+        // 2. Koulchi matché daba exact m3a la requête l'fo9aniya
         return $stmt->execute([
             ':title'       => $title,
             ':description' => $description,
             ':skill_id'    => $skillId,
-            ':user_id'     => $userId
+            ':user_id'     => $userId // <--- daba matché 100% m3a :user_id li f SQL
         ]);
     } catch (PDOException $e) {
         echo "Database Error: " . $e->getMessage();
@@ -70,10 +72,9 @@ class HelpRequestRepository
             return ['total' => 0, 'pending' => 0, 'assigned' => 0, 'resolved' => 0];
         }
     }
-   public function assignRequest(int $requestId, string $tutorName): bool
+public function assignRequest(int $requestId, string $tutorName): bool
 {
     try {
-        
         $query = "UPDATE help_requests 
                   SET status = 'ASSIGNED', tutor_name = :tutor_name 
                   WHERE id = :id AND status = 'PENDING'"; 

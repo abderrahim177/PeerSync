@@ -84,46 +84,40 @@ CREATE TABLE help_requests (
         'ASSIGNED',
         'RESOLVED'
     ) DEFAULT 'PENDING',
-    student_id INT NOT NULL,
-    tutor_id INT NULL,
+    userId INT NOT NULL,
     skill_id INT NOT NULL,
-    FOREIGN KEY (student_id) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (tutor_id) REFERENCES users (id) ON DELETE SET NULL,
+    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE, -- <--- Added comma here
     FOREIGN KEY (skill_id) REFERENCES skills (id) ON DELETE CASCADE
-);
+); 
 
 INSERT INTO
     help_requests (
         title,
         description,
         status,
-        student_id,
-        tutor_id,
+        userId,
         skill_id
     )
 VALUES (
         'Problème héritage POO',
         'Je bloque sur l’héritage en programmation orientée objet',
         'PENDING',
-        1,
-        NULL,
-        4
+        1, -- userId
+        1  -- skill_id (Removed the extra 4)
     ),
     (
         'Erreur requête SQL',
         'Je ne comprends pas les jointures SQL',
         'ASSIGNED',
-        3,
-        2,
-        2
+        3, -- userId
+        2  -- skill_id (Removed the extra 2)
     ),
     (
         'Besoin aide JavaScript',
         'Problème avec les événements JS',
         'RESOLVED',
-        1,
-        4,
-        3
+        1, -- userId
+        4  -- skill_id (Removed the extra 3)
     );
 
 CREATE TABLE reviews (

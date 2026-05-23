@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../../repositories/HelpRequestRepository.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 1. Dima l'bdaya b l'session bach t9ra ola t-sauvegarder l'user data mzyan
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -11,22 +12,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dbConnection = $database->connect();
     $repository = new HelpRequestRepository($dbConnection);
 
-    
-    // Confirm & Take Request
- 
+    // ==========================================
+    // ACTION 1: Confirm & Take Request (Tutor)
+    // ==========================================
     if (isset($_POST['assign'])) {
         $requestId = isset($_POST['request_id']) ? intval($_POST['request_id']) : 0;
         $userName  = isset($_POST['user_name']) ? trim($_POST['user_name']) : '';
 
-      
+        // Verification bli l'smiya o l'id machi khawyin
         if ($requestId === 0 || empty($userName)) {
             header('Location: /peersync/views/auth/dashboard.php?error=invalid_request');
             exit();
         }
+
+        // Exécuter l'update f repository b l'id o tutor name
         $success = $repository->assignRequest($requestId, $userName);
 
         if ($success) {
-            // save name in session storage
+            // Sauvegarder l'smiya lli ktabha f session storage
             $_SESSION['user_name'] = $userName;
             
             header('Location: /peersync/views/auth/dashboard.php?section=tutor&success=request_assigned');
@@ -36,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-   
-    // Create New Request
- 
+    // ==========================================
+    // ACTION 2: Create New Request (Student)
+    // ==========================================
     $title       = isset($_POST['title']) ? trim($_POST['title']) : '';
     $skillId     = isset($_POST['technology']) ? intval($_POST['technology']) : 0;
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';

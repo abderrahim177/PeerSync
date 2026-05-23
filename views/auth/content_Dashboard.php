@@ -61,16 +61,26 @@ function timeAgo($timestamp) {
 
 <section class="flex-1 p-8 space-y-8 overflow-y-auto bg-slate-50 dark:bg-[#0b132b] transition-colors duration-300">
 
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Welcome back, <span><?= htmlspecialchars($name) . '!' ?></span></h2>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Track your help requests and get assistance from tutors.</p>
-        </div>
-        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2.5 rounded-xl flex items-center space-x-2 transition text-sm shadow-md shadow-blue-500/10 self-start sm:self-auto">
+    <!-- [UPDATE] Modified header block to include both buttons side-by-side -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Welcome back, <span><?= htmlspecialchars($name) . '!' ?></span></h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Track your help requests and get assistance from tutors.</p>
+    </div>
+    <div class="flex items-center space-x-3 self-start sm:self-auto">
+        <!-- New Add Skill Button -->
+        <button onclick="openSkillModal()" class="bg-slate-200 hover:bg-slate-300 dark:bg-[#1e295d] dark:hover:bg-[#2a3a7c] text-slate-800 dark:text-white font-medium px-4 py-2.5 rounded-xl flex items-center space-x-2 transition text-sm shadow-sm">
+            <i class="fa-solid fa-gear text-xs"></i>
+            <span>Add Skill</span>
+        </button>
+        
+        <!-- Existing New Request Button -->
+        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2.5 rounded-xl flex items-center space-x-2 transition text-sm shadow-md shadow-blue-500/10">
             <i class="fa-solid fa-plus text-xs"></i>
             <span>New Request</span>
         </button>
     </div>
+</div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-5 flex items-center justify-between shadow-sm">

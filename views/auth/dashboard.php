@@ -51,7 +51,12 @@ $stats        = $helpRepo->getRequestStats();
         body {
             font-family: 'Inter', sans-serif;
         }
-
+    @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+.animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -119,13 +124,27 @@ $stats        = $helpRepo->getRequestStats();
                             <span>New Request</span>
                         </button>
 
-                        <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200 transition">
-                            <div class="flex items-center space-x-3">
-                                <i class="fa-regular fa-file-lines text-base w-4 text-center"></i>
-                                <span>My Requests</span>
-                            </div>
-                            <span class="bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-[11px] px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-500/20">3</span>
-                        </a>
+                        <a href="?section=Requests_Resolved" 
+   class="flex items-center justify-between px-3 py-2.5 rounded-xl transition group text-sm 
+   <?= $section === 'Requests_Resolved' 
+       ? 'bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium border border-blue-500/10' 
+       : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
+    
+    <div class="flex items-center space-x-3">
+        <!-- Icon m9adda b dynamic color keytbeddel hover -->
+        <i class="fa-regular fa-file-lines text-base w-4 text-center transition-colors 
+           <?= $section === 'Requests_Resolved' ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' ?>"></i>
+        <span>Requests Resolved</span>
+    </div>
+    
+    <!-- Badge m9adda b dynamic color text shadow -->
+    <span class="text-[11px] px-2 py-0.5 rounded-full border transition-colors 
+          <?= $section === 'Requests_Resolved' 
+              ? 'bg-blue-500/20 text-blue-500 border-blue-500/30' 
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700' ?>">
+        <?= $stats['resolved']; ?>
+    </span>
+</a>
                     </nav>
 
                     <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mt-5 mb-2">Explore</p>
@@ -225,15 +244,19 @@ $stats        = $helpRepo->getRequestStats();
         </header>
 
         <!-- DYNAMIC CONTENT -->
-      <?php if ($section === 'tutor'): ?>
-    <?php include __DIR__ . '/Content_Tutor.php'; ?>
-<?php elseif ($section === 'profile'): ?>
-    <?php include __DIR__ . '/profile.php'; ?>
-<?php elseif ($section === 'reviews'): ?>
-    <?php include __DIR__ . '/reviews.php'; ?>
-<?php else: ?>
-    <?php include __DIR__ . '/Content_dashboard.php'; ?>
-<?php endif; ?>
+      <?php
+if ($section === 'tutor') {
+    include __DIR__ . '/Content_Tutor.php';
+} elseif ($section === 'profile') {
+    include __DIR__ . '/profile.php';
+} elseif ($section === 'reviews') {
+    include __DIR__ . '/reviews.php';
+} elseif ($section === 'Requests_Resolved') {
+    include __DIR__ . '/Requests_Resolved.php';
+} else {
+    include __DIR__ . '/Content_dashboard.php';
+}
+?>
 
     <!-- MODAL: New Request -->
     <div id="request-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
@@ -431,8 +454,112 @@ $stats        = $helpRepo->getRequestStats();
         </div>
     </div>
 </div>
+<!-- [NEW] Modern Backdrop-Blur Modal for adding a skill -->
+<div id="skill-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+    
+    <div id="skill-card" class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl w-full max-w-md shadow-2xl scale-95 transition-all duration-300 overflow-hidden">
+        
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-slate-100 dark:border-[#1e295d]/60 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i class="fa-solid fa-graduation-cap text-blue-500 text-base"></i>
+                <span>Add New Skill / Technology</span>
+            </h3>
+            <button onclick="closeSkillModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-[#0b132b]">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
 
+        <!-- Form -->
+        <form id="skill-form" action="add-skill-process.php" method="POST" onsubmit="return validateSkillForm(event)" class="p-6 space-y-4">
+            
+            <div class="space-y-1.5">
+                <label for="skill-name" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Skill Name</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                        <i class="fa-solid fa-code text-xs"></i>
+                    </span>
+                    <input type="text" id="skill-name" name="skill_name" placeholder="e.g. Laravel, React, Docker..." 
+                           class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-300 pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm placeholder-slate-400 transition-all">
+                </div>
+                <p id="skill-name-error" class="text-red-500 text-xs hidden mt-1 flex items-center">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Please enter a valid skill name (min 2 characters).
+                </p>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="pt-4 border-t border-slate-100 dark:border-[#1e295d]/60 flex items-center justify-end space-x-3">
+                <button type="button" onclick="closeSkillModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#0b132b] transition">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-md shadow-blue-500/10">
+                    Save Skill
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
     <script>
+        // skills modal 
+        // [NEW] Logic for Add Skill Modal & Validation
+
+function openSkillModal() {
+    const modal = document.getElementById('skill-modal');
+    const card = document.getElementById('skill-card');
+    
+    if (modal && card) {
+        document.body.appendChild(modal); // Safely mount to body to avoid z-index/overflow issues
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+        
+        // Focus input straight away
+        setTimeout(() => document.getElementById('skill-name').focus(), 100);
+    }
+}
+
+function closeSkillModal() {
+    const modal = document.getElementById('skill-modal');
+    const card = document.getElementById('skill-card');
+    const form = document.getElementById('skill-form');
+    const errorMsg = document.getElementById('skill-name-error');
+    const input = document.getElementById('skill-name');
+    
+    if (modal && card) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+        
+        // Reset inputs and errors when closing
+        if(form) form.reset();
+        if(errorMsg) errorMsg.classList.add('hidden');
+        if(input) input.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+    }
+}
+
+function validateSkillForm(event) {
+    const input = document.getElementById('skill-name');
+    const errorMsg = document.getElementById('skill-name-error');
+    const value = input.value.trim();
+
+    if (value.length < 2) {
+        // Stop form submission
+        event.preventDefault();
+        
+        // Show modern error layout
+        errorMsg.classList.remove('hidden');
+        input.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
+        
+        // Add shake animation effect (Optional but matches high quality visual standard)
+        input.classList.add('animate-shake');
+        setTimeout(() => input.classList.remove('animate-shake'), 500);
+        
+        return false;
+    }
+    
+    return true;
+}
         // Fonction mni kayclikki 3la Mark as Resolved
 window.handleResolveRequest = function() {
     const btn = document.getElementById('resolve-btn');
