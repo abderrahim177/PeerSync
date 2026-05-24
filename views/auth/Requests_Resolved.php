@@ -137,15 +137,6 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
         </div>
 
     </div>
-
-    <div class="fixed bottom-6 right-6 z-50">
-        <button id="theme-toggle" class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-medium text-xs px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 transition active:scale-95">
-            <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden"></i>
-            <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden"></i>
-            <span>Toggle Dark/Light Mode</span>
-        </button>
-    </div>
-
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');

@@ -89,119 +89,96 @@ $stats        = $helpRepo->getRequestStats();
 
     <!-- ASIDE -->
     <aside class="w-64 bg-white dark:bg-[#111936] border-r border-slate-200 dark:border-[#1e295d] flex flex-col h-screen justify-between flex-shrink-0 hidden md:flex transition-colors duration-300">
-        <div class="overflow-y-auto no-scrollbar flex-1 flex flex-col justify-between">
-            <div>
-                <div class="p-5 flex items-center space-x-2.5">
-                    <div class="bg-slate-100 dark:bg-[#1a365d]/50 w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm dark:shadow-lg dark:shadow-black/20 border border-slate-200 dark:border-[#1e295d]">
-                        <svg class="w-5 h-5 text-[#88c057]" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 3L5 12L19 21V16.5L9.5 12L19 7.5V3Z" />
-                        </svg>
-                    </div>
-                    <span class="text-slate-900 dark:text-white text-lg font-bold tracking-wide">ENAA</span>
+    <div class="overflow-y-auto no-scrollbar flex-1 flex flex-col justify-between">
+        <div>
+            <div class="p-5 flex items-center space-x-2.5">
+                <div class="bg-slate-100 dark:bg-[#1a365d]/50 w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm dark:shadow-lg dark:shadow-black/20 border border-slate-200 dark:border-[#1e295d]">
+                    <svg class="w-5 h-5 text-[#88c057]" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 3L5 12L19 21V16.5L9.5 12L19 7.5V3Z" />
+                    </svg>
                 </div>
-
-                <div class="px-3 py-1">
-                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mb-2">Main</p>
-                    <nav class="space-y-0.5">
-                        <!-- Dashboard link -->
-                        
-                        <a href="?section=dashboard" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition
-                            <?= $section === 'dashboard' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
-                            <div class="flex items-center space-x-3">
-                                <i class="fa-solid fa-table-columns text-base w-4 text-center"></i>
-                                <span>Dashboard</span>
-                            </div>
-                        </a>
-                        <a href="?section=profile" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition
-                            <?= $section === 'profile' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
-                            <div class="flex items-center space-x-3">
-                                <i class="fa-regular fa-user text-base w-4 text-center"></i>
-                                <span>My Profile</span>
-                            </div>
-                        </a>
-                        
-
-                        <a href="?section=Requests_Resolved" 
-   class="flex items-center justify-between px-3 py-2.5 rounded-xl transition group text-sm 
-   <?= $section === 'Requests_Resolved' 
-       ? 'bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium border border-blue-500/10' 
-       : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
-    
-    <div class="flex items-center space-x-3">
-        <!-- Icon m9adda b dynamic color keytbeddel hover -->
-        <i class="fa-regular fa-file-lines text-base w-4 text-center transition-colors 
-           <?= $section === 'Requests_Resolved' ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' ?>"></i>
-        <span>Requests Resolved</span>
-    </div>
-    
-    <!-- Badge m9adda b dynamic color text shadow -->
-    <span class="text-[11px] px-2 py-0.5 rounded-full border transition-colors 
-          <?= $section === 'Requests_Resolved' 
-              ? 'bg-blue-500/20 text-blue-500 border-blue-500/30' 
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700' ?>">
-        <?= $stats['resolved']; ?>
-    </span>
-</a>
-                    </nav>
-
-                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mt-5 mb-2">Explore</p>
-                    <nav class="space-y-0.5">
-                        <!-- Espace Tuteur link -->
-                        <a href="?section=tutor" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition
-                            <?= $section === 'tutor' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-4 text-center flex-shrink-0">
-                                <circle cx="8" cy="5" r="3" />
-                                <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" />
-                                <path d="M11 2l1.5 1.5L15 1" />
-                            </svg>
-                            <span>Espace Tuteur</span>
-                        </a>
-
-                       <a href="?section=reviews" 
-                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition <?= ($section === 'reviews') ? 'bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">                       
-                        <i class="<?= ($section === 'reviews') ? 'fa-solid' : 'fa-regular' ?> fa-star text-base w-4 text-center"></i>                      
-                        <span>Reviews & Ratings</span>
-                    </a>
-                    </nav>
-                </div>
+                <span class="text-slate-900 dark:text-white text-lg font-bold tracking-wide">ENAA</span>
             </div>
 
-            <div class="px-3 py-4 mt-auto">
-                <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mb-2">Account</p>
-                <nav class="space-y-0.5">
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200 transition">
-                        <i class="fa-solid fa-gear text-base w-4 text-center"></i>
-                        <span>Settings</span>
+            <div class="px-3 py-1">
+                <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mb-1.5">Main</p>
+                <nav class="space-y-1">
+                    <a href="?section=dashboard" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition text-sm
+                        <?= $section === 'dashboard' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-table-columns text-base w-4 text-center"></i>
+                            <span>Dashboard</span>
+                        </div>
                     </a>
-                   <a href="/peersync/views/auth/logout-process.php" 
-                class="flex items-center space-x-3 px-3 py-2.5 rounded-xl 
-                        text-slate-600 dark:text-slate-400 
-                        hover:bg-red-50 dark:hover:bg-red-500/10 
-                        hover:text-red-600 dark:hover:text-red-400 
-                        border border-transparent hover:border-red-200/60 dark:hover:border-red-500/20
-                        transition-all duration-200 group">
-                    
-                    <i class="fa-solid fa-right-from-bracket text-sm w-5 text-center text-slate-400 dark:text-slate-500 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors"></i>
-                    <span class="font-medium text-sm">Logout</span>
-                    
-                </a>
+
+                    <a href="?section=profile" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition text-sm
+                        <?= $section === 'profile' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-regular fa-user text-base w-4 text-center"></i>
+                            <span>My Profile</span>
+                        </div>
+                    </a>
+
+                    <a href="?section=Requests_Resolved" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition group text-sm 
+                        <?= $section === 'Requests_Resolved' ? 'bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium border border-blue-500/10' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-regular fa-file-lines text-base w-4 text-center transition-colors <?= $section === 'Requests_Resolved' ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' ?>"></i>
+                            <span>Requests Resolved</span>
+                        </div>
+                        <span class="text-[11px] px-2 py-0.5 rounded-full border transition-colors <?= $section === 'Requests_Resolved' ? 'bg-blue-500/20 text-blue-500 border-blue-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700' ?>">
+                            <?= $stats['resolved']; ?>
+                        </span>
+                    </a>
+                </nav>
+
+                <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mt-4 mb-1.5">Explore</p>
+                <nav class="space-y-1">
+                    <a href="?section=tutor" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition text-sm
+                        <?= $section === 'tutor' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-4 text-center flex-shrink-0">
+                            <circle cx="8" cy="5" r="3" />
+                            <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+                            <path d="M11 2l1.5 1.5L15 1" />
+                        </svg>
+                        <span>Espace Tuteur</span>
+                    </a>
+
+                    <a href="?section=reviews" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition text-sm <?= ($section === 'reviews') ? 'bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>"> 
+                        <i class="<?= ($section === 'reviews') ? 'fa-solid' : 'fa-regular' ?> fa-star text-base w-4 text-center"></i> 
+                        <span>Reviews & Ratings</span>
+                    </a>
                 </nav>
             </div>
         </div>
 
-        <div class="p-4 border-t border-slate-200 dark:border-[#1e295d] bg-white dark:bg-[#111936] flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/20 cursor-pointer transition sticky bottom-0 z-10 flex-shrink-0">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm cursor-pointer">
-                    <?php echo htmlspecialchars($initials); ?>
-                </div>
-                <div>
-                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight"><?= htmlspecialchars($name) ?></h4>
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500"><?= htmlspecialchars($role) ?></span>
-                </div>
-            </div>
-            <i class="fa-solid fa-chevron-down text-xs text-slate-400 dark:text-slate-500"></i>
+        <div class="px-3 py-3 mt-auto">
+            <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mb-1.5">Account</p>
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200 transition">
+                    <i class="fa-solid fa-gear text-base w-4 text-center"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="/peersync/views/auth/logout-process.php" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 border border-transparent hover:border-red-200/60 dark:hover:border-red-500/20 transition-all duration-200 group">
+                    <i class="fa-solid fa-right-from-bracket text-sm w-5 text-center text-slate-400 dark:text-slate-500 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
         </div>
-    </aside>
+    </div>
+
+    <div class="p-4 border-t border-slate-200 dark:border-[#1e295d] bg-white dark:bg-[#111936] flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/20 cursor-pointer transition sticky bottom-0 z-10 flex-shrink-0">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm cursor-pointer">
+                <?php echo htmlspecialchars($initials); ?>
+            </div>
+            <div>
+                <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight"><?= htmlspecialchars($name) ?></h4>
+                <span class="text-[11px] text-slate-400 dark:text-slate-500"><?= htmlspecialchars($role) ?></span>
+            </div>
+        </div>
+        <i class="fa-solid fa-chevron-down text-xs text-slate-400 dark:text-slate-500"></i>
+    </div>
+</aside>
 
     <!-- MAIN -->
     <main class="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">

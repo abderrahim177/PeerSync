@@ -36,7 +36,14 @@ VALUES (
         '123456',
         'tutor'
     );
-
+INSERT INTO
+    users (name, email, password, role)
+VALUES (
+        'abderrahim',
+        'abderrahim@enaa.ma',
+        '123456',
+        'student'
+    );
 CREATE TABLE skills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL

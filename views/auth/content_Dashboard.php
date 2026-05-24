@@ -333,7 +333,7 @@ function timeAgo($timestamp) {
         <form action="/peersync/app/controller/HelpRequestController.php" method="POST" class="flex flex-col flex-1 overflow-hidden">
             
             <input type="hidden" name="help_request_id" id="help-request-id" value="1">
-            <input  name="rating" id="rating-input" >
+            <input type="hidden"  name="rating" id="rating-input" >
             
 
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
