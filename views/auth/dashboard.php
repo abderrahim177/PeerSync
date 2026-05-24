@@ -154,10 +154,11 @@ $stats        = $helpRepo->getRequestStats();
         <div class="px-3 py-3 mt-auto">
             <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase px-3 mb-1.5">Account</p>
             <nav class="space-y-1">
-                <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200 transition">
-                    <i class="fa-solid fa-gear text-base w-4 text-center"></i>
-                    <span>Settings</span>
-                </a>
+                <a href="?section=Settings" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm transition
+            <?= $section === 'Settings' ? 'bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200' ?>">
+            <i class="fa-solid fa-gear text-base w-4 text-center"></i>
+            <span>Settings</span>
+        </a>
                 <a href="/peersync/views/auth/logout-process.php" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 border border-transparent hover:border-red-200/60 dark:hover:border-red-500/20 transition-all duration-200 group">
                     <i class="fa-solid fa-right-from-bracket text-sm w-5 text-center text-slate-400 dark:text-slate-500 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors"></i>
                     <span>Logout</span>
@@ -227,7 +228,10 @@ if ($section === 'tutor') {
     include __DIR__ . '/reviews.php';
 } elseif ($section === 'Requests_Resolved') {
     include __DIR__ . '/Requests_Resolved.php';
-} else {
+} elseif ($section === 'Settings') {
+    include __DIR__ . '/Settings.php';
+    
+}else {
     include __DIR__ . '/Content_dashboard.php';
 }
 ?>
