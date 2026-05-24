@@ -244,7 +244,197 @@ function timeAgo($timestamp) {
         </div>
     </div>
 </section>
+<!-- new request modale -->
+ <div id="request-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <form action="/peersync/app/controller/HelpRequestController.php" method="post" class="bg-white dark:bg-[#111936] w-full max-w-xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300" id="modal-card">
 
+            <div class="p-6 pb-4 border-b border-slate-100 dark:border-[#1e295d] flex items-start justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Create Help Request</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Describe your problem and a tutor will be assigned to help you.</p>
+                </div>
+                <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Title <span class="text-red-500">*</span></label>
+                    <input id="modal-title" name="title" type="text" placeholder="e.g., Help with React useEffect hook"
+                        class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm">
+                    <p id="title-error" class="text-[11px] text-red-500 hidden">Title is required.</p>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500">A clear, concise title helps tutors understand your issue quickly.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Technology / Skill <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <select id="modal-tech" name="technology" class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition text-sm appearance-none shadow-sm cursor-pointer">
+                            <option value="">select technology. . .</option>
+                            <?php foreach ($technologies as $tech): ?>
+                                <option value="<?= $tech['id']; ?>"><?= htmlspecialchars($tech['name']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 pointer-events-none">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </span>
+                    </div>
+                    <p id="tech-error" class="text-[11px] text-red-500 hidden">Please select a technology.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Description <span class="text-red-500">*</span></label>
+                    <textarea id="modal-desc" name="description" rows="4" placeholder="Describe your problem in detail. Include any error messages, what you've tried, and what you expected to happen."
+                        class="w-full bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-200 px-4 py-3 rounded-xl border border-slate-200 dark:border-[#1e295d] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm resize-none"></textarea>
+                    <p id="desc-error" class="text-[11px] text-red-500 hidden">Description is required.</p>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500">The more detail you provide, the faster you'll get effective help.</p>
+                </div>
+
+                <div class="bg-blue-50/50 dark:bg-[#0b132b]/50 border border-blue-100 dark:border-[#1e295d] rounded-xl p-4 flex items-start space-x-3">
+                    <i class="fa-regular fa-circle-question text-blue-500 dark:text-blue-400 text-base mt-0.5"></i>
+                    <div class="space-y-1">
+                        <h4 class="text-xs font-semibold text-slate-800 dark:text-slate-300">Tips for a great request</h4>
+                        <ul class="text-[11px] text-slate-500 dark:text-slate-400 space-y-1 list-disc list-inside pl-0.5">
+                            <li>Be specific about what you're trying to accomplish</li>
+                            <li>Include relevant code snippets or error messages</li>
+                            <li>Mention what you've already tried</li>
+                            <li>Share links to documentation you've read</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 border-t border-slate-100 dark:border-[#1e295d] flex items-center justify-end space-x-3 bg-slate-50/50 dark:bg-[#111936]">
+                <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
+
+                <button id="submit-request-btn" name="submit" type="submit" disabled
+                    class="px-5 py-2 bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 font-medium text-sm rounded-xl transition cursor-not-allowed">
+                    Submit Request
+                </button>
+            </div>
+        </form>
+    </div>
+<!-- details modale -->
+  <div id="details-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="details-card" class="bg-white dark:bg-[#0b132b] w-full max-w-4xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300 text-slate-600 dark:text-slate-300">
+
+        <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <button onclick="closeDetailsModal()" class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </button>
+            <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div class="p-6 overflow-y-auto custom-scrollbar flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 space-y-6">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <span id="detail-badge-tech" class="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">React</span>
+                        <span id="detail-badge-status" class="text-[11px] px-2.5 py-0.5 rounded-md font-medium">In Progress</span>
+                    </div>
+                    <h2 id="detail-title" class="text-xl font-bold text-slate-900 dark:text-white">Help with React useEffect cleanup</h2>
+                    
+                    <div id="detail-desc" class="text-slate-600 dark:text-slate-400 space-y-3 text-xs leading-relaxed">
+                        </div>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500 flex items-center">
+                        <i class="fa-regular fa-clock mr-1.5"></i>
+                        <span id="detail-date">May 18, 2026 at 2:30 PM</span>
+                    </p>
+                </div>
+
+                <hr class="border-slate-200 dark:border-slate-800">
+
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white tracking-wide">Activity Timeline</h3>
+                    <div class="relative pl-6 space-y-6 before:absolute before:bottom-2 before:top-2 before:left-[11px] before:w-[1px] before:bg-slate-200 dark:before:bg-slate-800">
+                        <div class="relative">
+                            <div class="absolute -left-[21px] mt-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Request created</h4>
+                                    <p id="timeline-user-name" class="text-[11px] text-slate-500 mt-0.5"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="timeline-tutor-assigned" class="relative">
+                            <div class="absolute -left-[21px] mt-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Tutor assigned</h4>
+                                    <p id="timeline-tutor-name" class="text-[11px] text-slate-500 mt-0.5"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 pt-2">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
+                    <div class="space-y-2">
+                        <textarea rows="3" placeholder="Write a comment..." class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
+                        <div class="flex justify-end">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-sm">
+                                <i class="fa-regular fa-paper-plane text-[10px]"></i>
+                                <span>Send</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-5">
+                <div id="tutor-info-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4">
+                    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Assigned Tutor</h4>
+                    <div class="flex items-center space-x-3">
+                        <div id="tutor-initial" class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-400">S</div>
+                        <div>
+                            <h4 id="tutor-full-name" class="text-xs font-semibold text-slate-900 dark:text-white">Sarah Martinez</h4>
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500">Tutor</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center space-x-2">
+                        <i class="fa-regular fa-message text-xs"></i>
+                        <span>Message Tutor</span>
+                    </button>
+                </div>
+                
+                <div id="no-tutor-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-center py-6 hidden">
+                    <p class="text-xs text-slate-400">Awaiting tutor assignment...</p>
+                </div>
+
+                <div id="actions-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
+    
+    <button id="resolve-btn" onclick="handleResolveRequest()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2 border-0 cursor-pointer">
+        <i id="resolve-icon" class="fa-regular fa-circle-check text-sm"></i>
+        <span id="resolve-text">Mark as Resolved</span>
+    </button>
+
+    <div id="rating-card" class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out border-t border-transparent space-y-3 pt-0">
+        <h5 class="text-xs font-semibold text-slate-700 dark:text-slate-300">Rate this session :</h5>
+        
+        <div class="flex items-center space-x-1.5 justify-center py-1">
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(1)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(2)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(3)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(4)"></i>
+            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(5)"></i>
+        </div>
+
+        <button name="submit" onclick="submitRating()" class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold py-2 rounded-xl text-[11px] transition border-0 cursor-pointer">
+            Submit Review
+        </button>
+    </div>
+</div>
 <style>
     .animate-spin-slow {
         animation: spin 6s linear infinite;
@@ -256,6 +446,21 @@ function timeAgo($timestamp) {
 </style>
 
 <script>
+     const modal = document.getElementById('request-modal');
+        const modalCard = document.getElementById('modal-card');
+
+        window.openModal = function () {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modalCard.classList.replace('scale-95', 'scale-100');
+    }
+
+        window.closeModal = function () {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalCard.classList.replace('scale-100', 'scale-95');
+        }
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
 document.addEventListener("DOMContentLoaded", function () {
     const filterBtn = document.getElementById('filter-btn');
     const filterDropdown = document.getElementById('filter-dropdown');
@@ -318,82 +523,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function openDetailsModal(button) {
-    const id = button.getAttribute('data-id');
-    const title = button.getAttribute('data-title');
-    const desc = button.getAttribute('data-desc');
-    const status = button.getAttribute('data-status') ? button.getAttribute('data-status').toUpperCase() : 'PENDING';
-    const tech = button.getAttribute('data-tech');
-    const date = button.getAttribute('data-date');
-    const tutorName = button.getAttribute('data-tutor');
-    const userName = button.getAttribute('data-user');
 
-    if(document.getElementById('detail-title')) document.getElementById('detail-title').textContent = title;
-    if(document.getElementById('detail-desc')) document.getElementById('detail-desc').innerHTML = `<p>${desc}</p>`;
-    if(document.getElementById('detail-date')) document.getElementById('detail-date').textContent = date;
-    if(document.getElementById('detail-badge-tech')) document.getElementById('detail-badge-tech').textContent = tech;
-    if(document.getElementById('timeline-user-name')) document.getElementById('timeline-user-name').textContent = userName;
-
-    const statusBadge = document.getElementById('detail-badge-status');
-    if (statusBadge) {
-        statusBadge.textContent = status.charAt(0) + status.slice(1).toLowerCase();
-        statusBadge.className = "text-[11px] px-2.5 py-0.5 rounded-full font-semibold border uppercase tracking-wider ";
-        
-        if (status === 'PENDING') {
-            statusBadge.className += "bg-amber-500/10 text-amber-600 border-amber-500/30";
-        } else if (status === 'ASSIGNED') {
-            statusBadge.className += "bg-blue-500/10 text-blue-600 border-blue-500/30";
-        } else if (status === 'RESOLVED') {
-            statusBadge.className += "bg-emerald-500/10 text-emerald-600 border-emerald-500/30";
-        }
-    }
-
-    const tutorInfoCard = document.getElementById('tutor-info-card');
-    const noTutorCard = document.getElementById('no-tutor-card');
-    const timelineTutor = document.getElementById('timeline-tutor-assigned');
-    const actionsCard = document.getElementById('actions-card');
-
-    if (tutorName && tutorName.trim() !== '') {
-        if(tutorInfoCard) tutorInfoCard.classList.remove('hidden');
-        if(noTutorCard) noTutorCard.classList.add('hidden');
-        if(timelineTutor) timelineTutor.classList.remove('hidden');
-        
-        if(document.getElementById('tutor-full-name')) document.getElementById('tutor-full-name').textContent = tutorName;
-        if(document.getElementById('timeline-tutor-name')) document.getElementById('timeline-tutor-name').textContent = tutorName;
-        if(document.getElementById('tutor-initial')) document.getElementById('tutor-initial').textContent = tutorName.charAt(0).toUpperCase();
-    } else {
-        if(tutorInfoCard) tutorInfoCard.classList.add('hidden');
-        if(noTutorCard) noTutorCard.classList.remove('hidden');
-        if(timelineTutor) timelineTutor.classList.add('hidden');
-    }
-
-    if (actionsCard) {
-        if (status === 'ASSIGNED') {
-            actionsCard.classList.remove('hidden');
-        } else {
-            actionsCard.classList.add('hidden');
-        }
-    }
-
-    const modal = document.getElementById('details-modal');
-    const card = document.getElementById('details-card');
-    
-    if (modal && card) {
-        document.body.appendChild(modal); 
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-        card.classList.remove('scale-95');
-        card.classList.add('scale-100');
-    }
-}
-
-function closeDetailsModal() {
-    const modal = document.getElementById('details-modal');
-    const card = document.getElementById('details-card');
-    
-    if (modal && card) {
-        modal.classList.add('opacity-0', 'pointer-events-none');
-        card.classList.remove('scale-100');
-        card.classList.add('scale-95');
-    }
-}
 </script>

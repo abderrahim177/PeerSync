@@ -77,8 +77,8 @@ function timeAgo($timestamp) {
             </span>
         </div>
     </div>
-
-    <div id="name-modal" class="fixed top-0 left-0 w-screen h-screen z-[9999] flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+<!-- modale take request -->
+    <div id="name-modal" class="fixed top-0 left-0 w-screen min-h-screen z-[9999] flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
     <form action="/peersync/app/controller/HelpRequestController.php" method="post" class="bg-white dark:bg-[#111936] w-full max-w-md rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col transform scale-95 transition-transform duration-300" id="name-modal-card">
         
         <input type="hidden" name="request_id" id="modal-request-id" value="">
