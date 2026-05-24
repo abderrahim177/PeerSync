@@ -471,7 +471,7 @@ if ($section === 'tutor') {
         </div>
 
         <!-- Form -->
-        <form id="skill-form" action="add-skill-process.php" method="POST" onsubmit="return validateSkillForm(event)" class="p-6 space-y-4">
+        <form id="skill-form" action="/peersync/app/controller/HelpRequestController.php" method="POST" onsubmit="return validateSkillForm(event)" class="p-6 space-y-4">
             
             <div class="space-y-1.5">
                 <label for="skill-name" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Skill Name</label>
@@ -492,7 +492,7 @@ if ($section === 'tutor') {
                 <button type="button" onclick="closeSkillModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#0b132b] transition">
                     Cancel
                 </button>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-md shadow-blue-500/10">
+                <button name= "submit" type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-md shadow-blue-500/10">
                     Save Skill
                 </button>
             </div>

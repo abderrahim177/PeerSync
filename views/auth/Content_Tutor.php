@@ -184,7 +184,6 @@ function timeAgo($timestamp) {
 </section>
 
 <script>
-// 🌟 عدلنا الدالة باش تستقبل الـ ID وتحطو ف الـ input المخفي وسط الفورم
 function openNameModal(requestId) {
     const modal = document.getElementById('name-modal');
     const card = document.getElementById('name-modal-card');

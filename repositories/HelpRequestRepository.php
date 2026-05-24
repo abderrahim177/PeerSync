@@ -98,4 +98,21 @@ public function getResolvedRequests() {
         return false;
     }
 }
+public function creatSkills($skills_name){
+    try{
+        $query = 'INSERT INTO skills (name)
+        VALUES (:skills_name);
+        ';
+
+        $stmt = $this->db->prepare($query);
+
+        return $stmt->execute([
+            ':skills_name' => $skills_name,
+        ]);
+
+    } catch (PDOException $e) {
+        echo "Database Error: " . $e->getMessage();
+        die();
+    }
+}
 }

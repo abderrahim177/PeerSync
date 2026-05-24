@@ -35,7 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit();
     }
+    if(isset($_POST['submit'])){
+        $skills = htmlspecialchars($_POST['skill_name']);
 
+        if(empty($skills)){
+            header('location : /peersync/views/auth/dashboard.php?error=invalid_request');
+            exit();
+        }
+        $success = $repository->creatSkills($skills);
+
+        if($success){
+            header('Location: /peersync/views/auth/dashboard.php?op=scc');
+            exit();
+        }
+        else{
+            header('Location: /peersync/views/auth/dashboard.php?error=db_error');
+            exit();
+        }
+    }
     // ACTION 2: Create New Request (Student)
     $title       = isset($_POST['title']) ? trim($_POST['title']) : '';
     $skillId     = isset($_POST['technology']) ? intval($_POST['technology']) : 0;
