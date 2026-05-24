@@ -76,7 +76,7 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
             </select>
         </div>
 
-        <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <?php if (!empty($resolvedRequests)): ?>
                 <?php foreach ($resolvedRequests as $request): ?>
                     <div class="group bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/5 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition duration-200 relative overflow-hidden">
@@ -129,7 +129,7 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="text-center py-12 bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/5 rounded-2xl">
+                <div class="text-center py-12 bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/5 rounded-2xl col-span-1 md:col-span-2">
                     <i class="fa-regular fa-folder-open text-slate-300 dark:text-slate-700 text-4xl mb-3"></i>
                     <p class="text-sm text-slate-500 dark:text-gray-400">No resolved requests found matching this context.</p>
                 </div>

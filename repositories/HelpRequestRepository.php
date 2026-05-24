@@ -37,21 +37,23 @@ class HelpRequestRepository
             return [];
         }
     }
-    public function getAllRequests(): array
-    {
-        try {
-
-            $query = "SELECT hr.*, s.name as skill_name 
+   public function getAllRequests(): array
+{
+    try {
+        // الترتيب الصحيح: FROM -> LEFT JOIN -> WHERE -> ORDER BY
+        $query = "SELECT hr.*, s.name as skill_name 
                   FROM help_requests hr
                   LEFT JOIN skills s ON hr.skill_id = s.id
+                  WHERE hr.status != 'RESOLVED'
                   ORDER BY hr.id DESC";
 
-            $stmt = $this->db->query($query);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return [];
-        }
+        $stmt = $this->db->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // يلا بغيتي تعرف واش كاين شي غلط آخر مستقبلا تقدر دير: die($e->getMessage());
+        return [];
     }
+}
 
     public function getRequestStats(): array
     {
@@ -111,6 +113,42 @@ public function creatSkills($skills_name){
         ]);
 
     } catch (PDOException $e) {
+        echo "Database Error: " . $e->getMessage();
+        die();
+    }
+}
+
+public function resolveAndRateRequest($help_request_id, $rating, $comment) {
+    try {
+        // كنبدأو الـ Transaction
+        $this->db->beginTransaction();
+
+        // 1. كنسجلو الـ Review ف جدول الـ reviews
+        $queryReview = "INSERT INTO reviews (help_request_id, rating, comment) 
+                        VALUES (:help_request_id, :rating, :comment)";
+        $stmtReview = $this->db->prepare($queryReview);
+        $stmtReview->execute([
+            ':help_request_id' => $help_request_id,
+            ':rating'          => $rating,
+            ':comment'         => $comment
+        ]);
+
+        // 2. كنحدثو الـ Status ديال الـ Request لـ RESOLVED ف جدول الـ help_requests (أو إسم جدول الطلبات عندك)
+        $queryStatus = "UPDATE help_requests 
+                        SET status = 'RESOLVED' 
+                        WHERE id = :help_request_id";
+        $stmtStatus = $this->db->prepare($queryStatus);
+        $stmtStatus->execute([
+            ':help_request_id' => $help_request_id
+        ]);
+
+        // يلا دازو بجوج بنجاح، كنأكدو العمليات ف الـ Database
+        $this->db->commit();
+        return true;
+
+    } catch (PDOException $e) {
+        // يلا وقع أي غلط ف شي وحدة فيهم، كنرجعو اللور وماتبدل حتى حاجة (Rollback)
+        $this->db->rollBack();
         echo "Database Error: " . $e->getMessage();
         die();
     }

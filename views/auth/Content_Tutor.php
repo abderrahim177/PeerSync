@@ -59,12 +59,21 @@ function timeAgo($timestamp) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        #name-modal {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    }
+    body{
+        margin :0;
+        padding: 0;
+    }
+    </style>
 </head>
 <body>
-    
-</body>
-</html>
-<section class="flex-1 p-8 space-y-8 overflow-y-auto bg-slate-50 dark:bg-[#0b132b] transition-colors duration-300">
+    <section class="flex-1 p-8 space-y-8 overflow-y-auto bg-slate-50 dark:bg-[#0b132b] transition-colors duration-300">
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -78,7 +87,7 @@ function timeAgo($timestamp) {
         </div>
     </div>
 <!-- modale take request -->
-    <div id="name-modal" class="fixed top-0 left-0 w-screen min-h-screen z-[9999] flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+<div id="name-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">    
     <form action="/peersync/app/controller/HelpRequestController.php" method="post" class="bg-white dark:bg-[#111936] w-full max-w-md rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col transform scale-95 transition-transform duration-300" id="name-modal-card">
         
         <input type="hidden" name="request_id" id="modal-request-id" value="">
@@ -238,3 +247,5 @@ document.addEventListener("DOMContentLoaded", function () {
     nameInput.addEventListener("blur", validateNameForm);
 });
 </script>
+</body>
+</html>

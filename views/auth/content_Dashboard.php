@@ -308,131 +308,147 @@ function timeAgo($timestamp) {
             <div class="p-5 border-t border-slate-100 dark:border-[#1e295d] flex items-center justify-end space-x-3 bg-slate-50/50 dark:bg-[#111936]">
                 <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
 
-                <button id="submit-request-btn" name="submit" type="submit" disabled
+                <button id="submit-request-btn" name="action_create" type="submit" disabled
                     class="px-5 py-2 bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 font-medium text-sm rounded-xl transition cursor-not-allowed">
                     Submit Request
                 </button>
             </div>
         </form>
     </div>
-<!-- details modale -->
-  <div id="details-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-    <div id="details-card" class="bg-white dark:bg-[#0b132b] w-full max-w-4xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300 text-slate-600 dark:text-slate-300">
 
+<div id="details-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    
+    <div id="details-card" class="bg-white dark:bg-[#0b132b] w-full max-w-4xl rounded-2xl border border-slate-200 dark:border-[#1e295d] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform scale-95 transition-transform duration-300 text-slate-600 dark:text-slate-300">
+        
         <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-            <button onclick="closeDetailsModal()" class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
+            <button type="button" onclick="closeDetailsModal()" class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
                 <i class="fa-solid fa-arrow-left"></i>
                 <span>Back to Dashboard</span>
             </button>
-            <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+            <button type="button" onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
 
-        <div class="p-6 overflow-y-auto custom-scrollbar flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="md:col-span-2 space-y-6">
-                <div class="space-y-4">
-                    <div class="flex items-center space-x-2">
-                        <span id="detail-badge-tech" class="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">React</span>
-                        <span id="detail-badge-status" class="text-[11px] px-2.5 py-0.5 rounded-md font-medium">In Progress</span>
-                    </div>
-                    <h2 id="detail-title" class="text-xl font-bold text-slate-900 dark:text-white">Help with React useEffect cleanup</h2>
-                    
-                    <div id="detail-desc" class="text-slate-600 dark:text-slate-400 space-y-3 text-xs leading-relaxed">
+        <form action="/peersync/app/controller/HelpRequestController.php" method="POST" class="flex flex-col flex-1 overflow-hidden">
+            
+            <input type="hidden" name="help_request_id" id="help-request-id" value="1">
+            <input  name="rating" id="rating-input" >
+            
+
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <div class="md:col-span-2 space-y-6">
+
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-2">
+                            <span id="detail-badge-tech" class="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[11px] px-2.5 py-0.5 rounded-md font-medium">React</span>
+                            <span id="detail-badge-status" class="text-[11px] px-2.5 py-0.5 rounded-md font-medium">In Progress</span>
                         </div>
-                    <p class="text-[11px] text-slate-400 dark:text-slate-500 flex items-center">
-                        <i class="fa-regular fa-clock mr-1.5"></i>
-                        <span id="detail-date">May 18, 2026 at 2:30 PM</span>
-                    </p>
-                </div>
+                        <h2 id="detail-title" class="text-xl font-bold text-slate-900 dark:text-white">Help with React useEffect cleanup</h2>
+                        <div id="detail-desc" class="text-slate-600 dark:text-slate-400 space-y-3 text-xs leading-relaxed"></div>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 flex items-center">
+                            <i class="fa-regular fa-clock mr-1.5"></i>
+                            <span id="detail-date">May 18, 2026 at 2:30 PM</span>
+                        </p>
+                    </div>
 
-                <hr class="border-slate-200 dark:border-slate-800">
+                    <hr class="border-slate-200 dark:border-slate-800">
 
-                <div class="space-y-4">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white tracking-wide">Activity Timeline</h3>
-                    <div class="relative pl-6 space-y-6 before:absolute before:bottom-2 before:top-2 before:left-[11px] before:w-[1px] before:bg-slate-200 dark:before:bg-slate-800">
-                        <div class="relative">
-                            <div class="absolute -left-[21px] mt-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-                                <i class="fa-regular fa-clock"></i>
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white tracking-wide">Activity Timeline</h3>
+                        <div class="relative pl-6 space-y-6 before:absolute before:bottom-2 before:top-2 before:left-[11px] before:w-[1px] before:bg-slate-200 dark:before:bg-slate-800">
+                            <div class="relative">
+                                <div class="absolute -left-[21px] mt-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                    <i class="fa-regular fa-clock"></i>
+                                </div>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Request created</h4>
+                                        <p id="timeline-user-name" class="text-[11px] text-slate-500 mt-0.5"></p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Request created</h4>
-                                    <p id="timeline-user-name" class="text-[11px] text-slate-500 mt-0.5"></p>
+
+                            <div id="timeline-tutor-assigned" class="relative">
+                                <div class="absolute -left-[21px] mt-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Tutor assigned</h4>
+                                        <p id="timeline-tutor-name" class="text-[11px] text-slate-500 mt-0.5"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
+                        <div class="space-y-2">
+                            <textarea name="comment" placeholder="Write a comment..." class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
+                            <div class="flex justify-end">
+                                <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-sm">
+                                    <i class="fa-regular fa-paper-plane text-[10px]"></i>
+                                    <span>Send</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="space-y-5">
+
+                    <div id="tutor-info-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4">
+                        <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Assigned Tutor</h4>
+                        <div class="flex items-center space-x-3">
+                            <div id="tutor-initial" class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-400">S</div>
+                            <div>
+                                <h4 id="tutor-full-name" class="text-xs font-semibold text-slate-900 dark:text-white">Sarah Martinez</h4>
+                                <p class="text-[11px] text-slate-400 dark:text-slate-500">Tutor</p>
+                            </div>
+                        </div>
+                        <button type="button" class="w-full bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center space-x-2">
+                            <i class="fa-regular fa-message text-xs"></i>
+                            <span>Message Tutor</span>
+                        </button>
+                    </div>
+
+                    <div id="no-tutor-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-center py-6 hidden">
+                        <p class="text-xs text-slate-400">Awaiting tutor assignment...</p>
+                    </div>
+
+                    <div id="actions-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                        <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
                         
-                        <div id="timeline-tutor-assigned" class="relative">
-                            <div class="absolute -left-[21px] mt-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="text-xs font-semibold text-slate-900 dark:text-white leading-tight">Tutor assigned</h4>
-                                    <p id="timeline-tutor-name" class="text-[11px] text-slate-500 mt-0.5"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <button type="button" id="resolve-btn" onclick="handleResolveRequest()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2 border-0 cursor-pointer">
+                            <i id="resolve-icon" class="fa-regular fa-circle-check text-sm"></i>
+                            <span id="resolve-text">Mark as Resolved</span>
+                        </button>
 
-                <div class="space-y-3 pt-2">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Comment</h3>
-                    <div class="space-y-2">
-                        <textarea rows="3" placeholder="Write a comment..." class="w-full bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 text-xs resize-none shadow-sm"></textarea>
-                        <div class="flex justify-end">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center space-x-1.5 shadow-sm">
-                                <i class="fa-regular fa-paper-plane text-[10px]"></i>
-                                <span>Send</span>
+                        <div id="rating-card" class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out border-t border-transparent space-y-3 pt-0">
+                            <h5 class="text-xs font-semibold text-slate-700 dark:text-slate-300">Rate this session :</h5>
+                            <div class="flex items-center space-x-1.5 justify-center py-1">
+                                <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="event.preventDefault(); setRating(1)"></i>
+                                <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="event.preventDefault(); setRating(2)"></i>
+                                <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="event.preventDefault(); setRating(3)"></i>
+                                <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="event.preventDefault(); setRating(4)"></i>
+                                <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="event.preventDefault(); setRating(5)"></i>
+                            </div>
+
+                            <button type="submit" name="action_resolve" class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold py-2 rounded-xl text-[11px] transition border-0 cursor-pointer">
+                                Submit Review
                             </button>
                         </div>
                     </div>
+
                 </div>
+
             </div>
-
-            <div class="space-y-5">
-                <div id="tutor-info-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4">
-                    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Assigned Tutor</h4>
-                    <div class="flex items-center space-x-3">
-                        <div id="tutor-initial" class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-400">S</div>
-                        <div>
-                            <h4 id="tutor-full-name" class="text-xs font-semibold text-slate-900 dark:text-white">Sarah Martinez</h4>
-                            <p class="text-[11px] text-slate-400 dark:text-slate-500">Tutor</p>
-                        </div>
-                    </div>
-                    <button class="w-full bg-white dark:bg-transparent border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center space-x-2">
-                        <i class="fa-regular fa-message text-xs"></i>
-                        <span>Message Tutor</span>
-                    </button>
-                </div>
-                
-                <div id="no-tutor-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-center py-6 hidden">
-                    <p class="text-xs text-slate-400">Awaiting tutor assignment...</p>
-                </div>
-
-                <div id="actions-card" class="bg-slate-50 dark:bg-[#111936] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-    <h4 class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Actions</h4>
-    
-    <button id="resolve-btn" onclick="handleResolveRequest()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl text-xs transition flex items-center justify-center space-x-2 border-0 cursor-pointer">
-        <i id="resolve-icon" class="fa-regular fa-circle-check text-sm"></i>
-        <span id="resolve-text">Mark as Resolved</span>
-    </button>
-
-    <div id="rating-card" class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out border-t border-transparent space-y-3 pt-0">
-        <h5 class="text-xs font-semibold text-slate-700 dark:text-slate-300">Rate this session :</h5>
+        </form>
         
-        <div class="flex items-center space-x-1.5 justify-center py-1">
-            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(1)"></i>
-            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(2)"></i>
-            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(3)"></i>
-            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(4)"></i>
-            <i class="fa-regular fa-star text-xl text-slate-300 dark:text-slate-600 cursor-pointer hover:scale-110 transition star-btn" onclick="setRating(5)"></i>
-        </div>
-
-        <button name="submit" onclick="submitRating()" class="w-full bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold py-2 rounded-xl text-[11px] transition border-0 cursor-pointer">
-            Submit Review
-        </button>
     </div>
 </div>
 <style>
@@ -446,6 +462,54 @@ function timeAgo($timestamp) {
 </style>
 
 <script>
+    
+   document.addEventListener("DOMContentLoaded", function () {
+    
+    let currentRating = 0;
+
+window.setRating = function(value) {
+
+    currentRating = value;
+    document.getElementById("rating-input").value = value;
+
+    const stars = document.querySelectorAll(".star-btn");
+
+    stars.forEach((star, index) => {
+
+        if(index < value){
+
+            star.classList.remove("fa-regular");
+            star.classList.add("fa-solid", "text-yellow-400");
+
+        } else {
+
+            star.classList.remove("fa-solid", "text-yellow-400");
+            star.classList.add("fa-regular", "text-slate-300");
+
+        }
+
+    });
+
+}
+
+    const modal = document.getElementById('request-modal');
+    const modalCard = document.getElementById('modal-card');
+
+    window.openModal = function () {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modalCard.classList.replace('scale-95', 'scale-100');
+    };
+
+    window.closeModal = function () {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modalCard.classList.replace('scale-100', 'scale-95');
+    };
+
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+});
      const modal = document.getElementById('request-modal');
         const modalCard = document.getElementById('modal-card');
 

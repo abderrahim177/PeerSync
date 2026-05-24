@@ -490,6 +490,7 @@ window.openDetailsModal = function(button) {
     if (!modal || !card) return;
 
     // 1. Récupération des données depuis le bouton cliqué
+    const id = button.getAttribute('data-id') || '';
     const title = button.getAttribute('data-title') || '';
     const desc = button.getAttribute('data-desc') || '';
     const status = (button.getAttribute('data-status') || '').toUpperCase();
@@ -497,7 +498,8 @@ window.openDetailsModal = function(button) {
     const date = button.getAttribute('data-date') || '';
     const tutorName = button.getAttribute('data-tutor') || '';
     const studentName = button.getAttribute('data-user') || 'Student';
-
+    const idInput = document.getElementById('help-request-id'); // 👈 كنجيبو الـ Input المخفي
+    if (idInput) idInput.value = id;
     // 2. Injection des données basiques dans le HTML du modal
     document.getElementById('detail-title').textContent = title;
     document.getElementById('detail-desc').textContent = desc;
@@ -521,7 +523,8 @@ window.openDetailsModal = function(button) {
     } else { // PENDING
         statusBadge.classList.add('bg-amber-500/10', 'text-amber-600', 'dark:text-amber-400', 'border-amber-500/20');
     }
-
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    card.classList.remove('scale-95');
     // 4. Gestion de la visibilité des cartes du tuteur (Assigned vs Awaiting)
     const tutorCard = document.getElementById('tutor-info-card');
     const noTutorCard = document.getElementById('no-tutor-card');
