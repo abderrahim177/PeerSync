@@ -492,7 +492,7 @@ if ($section === 'tutor') {
                 <button type="button" onclick="closeSkillModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#0b132b] transition">
                     Cancel
                 </button>
-                <button name= "submit" type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-md shadow-blue-500/10">
+                <button name= "creat_skills" type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-md shadow-blue-500/10">
                     Save Skill
                 </button>
             </div>

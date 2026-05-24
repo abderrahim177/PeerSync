@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit();
     }
-    if(isset($_POST['submit'])){
+    if(isset($_POST['creat_skills'])){
         $skills = htmlspecialchars($_POST['skill_name']);
 
         if(empty($skills)){
@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
     }
+
     // ACTION 2: Create New Request (Student)
     $title       = isset($_POST['title']) ? trim($_POST['title']) : '';
     $skillId     = isset($_POST['technology']) ? intval($_POST['technology']) : 0;

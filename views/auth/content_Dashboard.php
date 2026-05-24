@@ -218,19 +218,22 @@ function timeAgo($timestamp) {
                                     </span>
                                     <span class="flex items-center text-slate-500"><i class="fa-regular fa-clock mr-1.5 text-cyan-500/50"></i><?= timeAgo($request['created_at']); ?></span>
                                 </div>
-                                <button onclick="openDetailsModal(this)" 
-                                    data-id="<?= $request['id']; ?>"
-                                    data-title="<?= htmlspecialchars($request['title']); ?>"
-                                    data-desc="<?= htmlspecialchars($request['description']); ?>"
-                                    data-status="<?= $status; ?>"
-                                    data-tech="<?= htmlspecialchars($request['skill_name'] ?? 'Unknown'); ?>"
-                                    data-date="<?= timeAgo($request['created_at']); ?>"
-                                    data-tutor="<?= htmlspecialchars($request['tutor_name'] ?? ''); ?>"
-                                    data-user="<?= htmlspecialchars($request['user_name'] ?? 'Student'); ?>"
-                                    class="text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-500 dark:hover:text-cyan-300 inline-flex items-center space-x-1 bg-transparent border-0 cursor-pointer text-xs uppercase tracking-wider">
-                                    <span>Query Details</span>
-                                    <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i>
-                                </button>
+                                <?php if ($status === 'ASSIGNED'): ?>
+                            <button onclick="openDetailsModal(this)" 
+                                data-id="<?= $request['id']; ?>"
+                                data-title="<?= htmlspecialchars($request['title']); ?>"
+                                data-desc="<?= htmlspecialchars($request['description']); ?>"
+                                data-status="<?= $status; ?>"
+                                data-tech="<?= htmlspecialchars($request['skill_name'] ?? 'Unknown'); ?>"
+                                data-date="<?= timeAgo($request['created_at']); ?>"
+                                data-tutor="<?= htmlspecialchars($request['tutor_name'] ?? ''); ?>"
+                                data-user="<?= htmlspecialchars($request['user_name'] ?? 'Student'); ?>"
+                                class="text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-500 dark:hover:text-cyan-300 inline-flex items-center space-x-1 bg-transparent border-0 cursor-pointer text-xs uppercase tracking-wider">
+                                
+                                <span>Query Details</span>
+                                <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i>
+                            </button>
+                        <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
