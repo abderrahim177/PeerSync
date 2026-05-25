@@ -207,14 +207,153 @@ $stats        = $helpRepo->getRequestStats();
     </button>
 </div>
 
-                <div class="relative cursor-pointer p-1">
-                    <i class="fa-regular fa-bell text-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"></i>
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
-                </div>
+                <!-- Notification Wrapper -->
+<div class="relative inline-block text-left" id="notification-wrapper">
+    
+    <!-- Notification Trigger Icon -->
+    <button id="notification-btn" class="relative cursor-pointer p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 focus:outline-none">
+        <i class="fa-regular fa-bell text-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"></i>
+        <!-- Badge -->
+        <span class="absolute top-1 right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+    </button>
 
-                <div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm cursor-pointer">
-                    <?php echo htmlspecialchars($initials); ?>
+    <!-- Dropdown Menu -->
+    <!-- 
+      Animations classes details:
+      - Hidden by default: 'hidden'
+      - Opacity & Scale transitions for that smooth premium feeling
+    -->
+    <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 origin-top-right rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl dark:shadow-2xl focus:outline-none z-50 transform opacity-0 scale-95 transition-all duration-200 ease-out">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+            <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Notifications</h3>
+            <button class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">Mark all as read</button>
+        </div>
+
+        <!-- Notifications List Container -->
+        <div class="max-h-80 overflow-y-auto divide-y divide-slate-50 dark:divide-slate-800/50">
+            
+            <!-- Notification Item 1 (Unread) -->
+            <a href="#" class="flex gap-3 p-4 bg-blue-50/40 dark:bg-blue-950/10 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors duration-150">
+                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <i class="fa-solid fa-user-plus text-sm"></i>
                 </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm text-slate-800 dark:text-slate-200 font-medium">
+                        <span class="font-semibold text-slate-900 dark:text-white">Amine Benali</span> sent you a connection request.
+                    </p>
+                    <span class="text-xs text-slate-400 dark:text-slate-500 mt-1 block">Just now</span>
+                </div>
+                <!-- Unread Indicator Dot -->
+                <div class="flex-shrink-0 self-center">
+                    <span class="block w-2 h-2 rounded-full bg-blue-600"></span>
+                </div>
+            </a>
+
+            <!-- Notification Item 2 (Unread) -->
+            <a href="#" class="flex gap-3 p-4 bg-blue-50/40 dark:bg-blue-950/10 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors duration-150">
+                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                    <i class="fa-solid fa-circle-check text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm text-slate-800 dark:text-slate-200">
+                        Your payment for <span class="font-semibold text-slate-900 dark:text-white">Invoice #1024</span> was successful.
+                    </p>
+                    <span class="text-xs text-slate-400 dark:text-slate-500 mt-1 block">2 hours ago</span>
+                </div>
+                <div class="flex-shrink-0 self-center">
+                    <span class="block w-2 h-2 rounded-full bg-blue-600"></span>
+                </div>
+            </a>
+
+            <!-- Notification Item 3 (Read) -->
+            <a href="#" class="flex gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors duration-150">
+                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                    <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                        Storage space is running low (85% used). Upgrade your plan.
+                    </p>
+                    <span class="text-xs text-slate-400 dark:text-slate-500 mt-1 block">1 day ago</span>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="p-3 text-center border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 rounded-b-2xl">
+            <a href="#" class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                View all notifications
+            </a>
+        </div>
+    </div>
+</div>
+
+                <!-- Profile Menu Wrapper -->
+<div class="relative inline-block text-left" id="profile-wrapper">
+    
+    <!-- Profile Trigger Button -->
+    <button id="profile-btn" class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-slate-600 dark:text-slate-300 text-sm cursor-pointer hover:border-slate-400 dark:hover:border-slate-500 transition-all duration-200 focus:outline-none">
+        <?php echo htmlspecialchars($initials); ?>
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl dark:shadow-2xl focus:outline-none z-50 transform opacity-0 scale-95 transition-all duration-200 ease-out">
+        
+        <!-- User Info Header Section -->
+        <div class="px-4 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/40 rounded-t-2xl">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Signed in as</p>
+            <!-- Smya dyal l-user -->
+            <p class="text-sm font-bold text-slate-800 dark:text-white mt-1 truncate">
+                Amine Benali
+            </p>
+            <!-- Email walla l-role dyalo f l-platform -->
+            <p class="text-xs text-slate-500 dark:text-slate-400 truncate">
+                amine.developer@email.com
+            </p>
+            
+            <!-- Badge dyal l-Role (Admin/Professor/Student) -->
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-900 mt-2">
+                Administrator
+            </span>
+        </div>
+
+        <!-- Navigation Links Menu -->
+        <div class="p-1.5 space-y-0.5">
+            <!-- Profile Link -->
+            <a href="profile.php" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 rounded-xl transition-all duration-150 group">
+                <i class="fa-regular fa-user text-base text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 w-5"></i>
+                My Profile
+            </a>
+
+            <!-- Settings Link -->
+            <a href="settings.php" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 rounded-xl transition-all duration-150 group">
+                <i class="fa-regular fa-gear text-base text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 w-5"></i>
+                Account Settings
+            </a>
+
+            <!-- Help/Support Link -->
+            <a href="support.php" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 rounded-xl transition-all duration-150 group">
+                <i class="fa-regular fa-circle-question text-base text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 w-5"></i>
+                Help & Support
+            </a>
+        </div>
+
+        <!-- Separation Line -->
+        <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+
+        <!-- Logout Action Button -->
+        <div class="p-1.5">
+            <a href="logout.php" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all duration-150 group">
+                <i class="fa-regular fa-arrow-right-from-bracket text-base text-red-400 group-hover:text-red-600 dark:group-hover:text-red-400 w-5"></i>
+                Sign Out
+            </a>
+        </div>
+
+    </div>
+</div>
             </div>
         </header>
 
@@ -605,6 +744,88 @@ window.closeDetailsModal = function() {
             descInput.addEventListener("input", validateForm);
             descInput.addEventListener("blur", validateForm);
         });
+        document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('notification-btn');
+    const dropdown = document.getElementById('notification-dropdown');
+    const wrapper = document.getElementById('notification-wrapper');
+
+    function toggleDropdown() {
+        if (dropdown.classList.contains('hidden')) {
+            // Open animation
+            dropdown.classList.remove('hidden');
+            // Ghadi ntsnnaw chwya bach l-browser y-trigger transition
+            setTimeout(() => {
+                dropdown.classList.remove('opacity-0', 'scale-95');
+                dropdown.classList.add('opacity-100', 'scale-100');
+            }, 10);
+        } else {
+            // Close animation
+            dropdown.classList.remove('opacity-100', 'scale-100');
+            dropdown.classList.add('opacity-0', 'scale-95');
+            // Khassna ntsnnaw transition tsali (200ms) 3ad ndiro hidden
+            setTimeout(() => {
+                dropdown.classList.add('hidden');
+            }, 200);
+        }
+    }
+
+    // Event listener 3la l-bouton
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown();
+    });
+
+    // Tsadd l-dropdown ila klykyty f khwa dyal dashboard
+    document.addEventListener('click', (e) => {
+        if (!wrapper.contains(e.target) && !dropdown.classList.contains('hidden')) {
+            dropdown.classList.remove('opacity-100', 'scale-100');
+            dropdown.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                dropdown.classList.add('hidden');
+            }, 200);
+        }
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const profileBtn = document.getElementById('profile-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileWrapper = document.getElementById('profile-wrapper');
+
+    function toggleProfileDropdown() {
+        if (profileDropdown.classList.contains('hidden')) {
+            // Open Transition
+            profileDropdown.classList.remove('hidden');
+            setTimeout(() => {
+                profileDropdown.classList.remove('opacity-0', 'scale-95');
+                profileDropdown.classList.add('opacity-100', 'scale-100');
+            }, 10);
+        } else {
+            // Close Transition
+            profileDropdown.classList.remove('opacity-100', 'scale-100');
+            profileDropdown.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                profileDropdown.classList.add('hidden');
+            }, 200);
+        }
+    }
+
+    // Click trigger on avatar
+    profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleProfileDropdown();
+    });
+
+    // Close when clicking outside the profile menu wrapper
+    document.addEventListener('click', (e) => {
+        if (!profileWrapper.contains(e.target) && !profileDropdown.classList.contains('hidden')) {
+            profileDropdown.classList.remove('opacity-100', 'scale-100');
+            profileDropdown.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                profileDropdown.classList.add('hidden');
+            }, 200);
+        }
+    });
+});
     </script>
 </body>
 

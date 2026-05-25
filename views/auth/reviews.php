@@ -29,19 +29,18 @@ try {
     $reviewStats = ['avg_rating' => '0.0', 'total_feedbacks' => 0, 'satisfaction_rate' => 0];
 }
 
-// ثانياً: جلب الـ Reviews مع الـ Jointure الصحيحة (استعمال hr.userId)
 try {
     $reviewsQuery = "SELECT 
         r.id,
         r.rating,
         r.comment,
         hr.title as request_title,
-        u.name as student_name, -- سمية الطالب لي دار الـ Request
-        s.name as skill_name,    -- سمية الـ Skill
+        u.name as student_name, 
+        s.name as skill_name,    
         hr.id as help_request_id
     FROM reviews r
     JOIN help_requests hr ON r.help_request_id = hr.id
-    JOIN users u ON hr.userId = u.id -- هنا تم التصحيح لـ hr.userId على حساب الـ Structure ديالك
+    JOIN users u ON hr.userId = u.id 
     LEFT JOIN skills s ON hr.skill_id = s.id
     ORDER BY r.id DESC";
     
@@ -51,7 +50,6 @@ try {
     $reviewsList = [];
 }
 
-// دالة مسابعة لطباعة الحروف الأولى من الاسم (Avatar)
 function getInitials($name) {
     $words = explode(' ', $name);
     $initials = '';
