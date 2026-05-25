@@ -17,7 +17,7 @@ $stats        = $helpRepo->getRequestStats();
 $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
 ?>
 
-<section class="flex-1 p-4 sm:p-6 md:p-8 space-y-6 h-screen overflow-y-auto bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300 custom-scrollbar">
+<section class="flex-1 p-4 sm:p-6 md:p-8 space-y-6 h-screen overflow-y-auto bg-slate-50 dark:bg-[#0c1331] transition-colors duration-300 custom-scrollbar">
     
     <div class="max-w-5xl mx-auto">
         
@@ -31,7 +31,7 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
                 <p class="text-slate-500 dark:text-gray-400 text-sm mt-1">Review all completed peer tutoring and academic help sessions.</p>
             </div>
 
-            <div class="flex items-center gap-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/5 px-4 py-2.5 rounded-xl shadow-sm self-start sm:self-auto">
+            <div class="flex items-center gap-3 bg-white dark:bg-[#080d24] border border-slate-200 dark:border-white/5 px-4 py-2.5 rounded-xl shadow-sm self-start sm:self-auto">
                 <div class="w-8 h-8 rounded-lg bg-green-500/10 text-green-600 dark:text-green-400 flex items-center justify-center text-sm font-bold">
                     <?= htmlspecialchars($stats['resolved'] ?? count($resolvedRequests)); ?>
                 </div>
@@ -45,9 +45,9 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
                     <i class="fa-solid fa-magnifying-glass text-sm"></i>
                 </span>
                 <input type="text" placeholder="Search by technology or student name..." 
-                    class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition">
+                    class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl bg-white dark:bg-[#080d24] border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition">
             </div>
-            <select class="px-4 py-2.5 text-sm rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-300 focus:outline-none focus:border-blue-500 transition cursor-pointer">
+            <select class="px-4 py-2.5 text-sm rounded-xl bg-white dark:bg-[#080d24] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-300 focus:outline-none focus:border-blue-500 transition cursor-pointer">
                 <option>All Technologies</option>
                 <?php if (!empty($technologies)): ?>
                     <?php foreach ($technologies as $tech): ?>
@@ -64,7 +64,7 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pb-8">
             <?php if (!empty($resolvedRequests)): ?>
                 <?php foreach ($resolvedRequests as $request): ?>
-                    <div class="group bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/5 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition duration-200 relative overflow-hidden">
+                    <div class="group bg-white dark:bg-[#080d24] border border-slate-200 dark:border-white/5 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition duration-200 relative overflow-hidden">
                         <div class="absolute left-0 top-0 bottom-0 w-[4px] bg-green-500"></div>
                         
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">

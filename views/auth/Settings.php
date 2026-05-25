@@ -10,6 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Guest User';
 $role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Member';
+$email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : ''; // تأكد من وجوده في السيرفر
 
 $database = new Database();
 $dbConnection = $database->connect();
@@ -34,7 +35,6 @@ if (count($words) >= 2) {
     <title>Professional Settings Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Tailwind configuration for custom dark mode targeting
         tailwind.config = {
             darkMode: 'class',
         }
@@ -77,13 +77,13 @@ if (count($words) >= 2) {
                     <h2 class="text-xl font-semibold mb-1">Profile Information</h2>
                     <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Update your personal details and public profile.</p>
                     
-                    <div class="space-y-6">
+                    <form action="update-profile.php" method="POST" class="space-y-6">
                         <div class="flex items-center gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
                             <div class="relative group">
                                 <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-md">
                                     <?php echo htmlspecialchars($initials); ?>
                                 </div>
-                                <button class="absolute -bottom-1 -right-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1.5 rounded-lg shadow-sm hover:scale-105 transition-transform cursor-pointer">
+                                <button type="button" class="absolute -bottom-1 -right-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1.5 rounded-lg shadow-sm hover:scale-105 transition-transform cursor-pointer">
                                     <i data-lucide="camera" class="w-3.5 h-3.5 text-slate-600 dark:text-slate-300"></i>
                                 </button>
                             </div>
@@ -96,24 +96,24 @@ if (count($words) >= 2) {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Full Name</label>
-                                <input type="text" value="<?php echo htmlspecialchars($name); ?>" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                                <input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Email Address</label>
-                                <input type="email" value="<?php echo isset($_SESSION['user_email']) ? htmlspecialchars($_SESSION['user_email']) : ''; ?>" placeholder="your-email@example.com" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                                <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="your-email@example.com" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Bio</label>
-                            <textarea rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" placeholder="Tell us a little bit about yourself..."></textarea>
+                            <textarea name="bio" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" placeholder="Tell us a little bit about yourself..."></textarea>
                         </div>
-                    </div>
 
-                    <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-slate-100 dark:border-slate-800">
-                        <button class="px-4 py-2 text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer">Cancel</button>
-                        <button class="px-4 py-2 text-sm font-medium rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-500/10 transition-all cursor-pointer">Save Changes</button>
-                    </div>
+                        <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-slate-100 dark:border-slate-800">
+                            <button type="button" class="px-4 py-2 text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer">Cancel</button>
+                            <button type="submit" class="px-4 py-2 text-sm font-medium rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-500/10 transition-all cursor-pointer">Save Changes</button>
+                        </div>
+                    </form>
                 </section>
 
                 <section id="preferences" class="settings-section hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
@@ -184,17 +184,17 @@ if (count($words) >= 2) {
                     <h2 class="text-xl font-semibold mb-1">Security Settings</h2>
                     <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Manage your password and active login sessions.</p>
                     
-                    <div class="space-y-4 max-w-md">
+                    <form action="update-password.php" method="POST" class="space-y-4 max-w-md">
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Current Password</label>
-                            <input type="password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                            <input type="password" name="current_password" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">New Password</label>
-                            <input type="password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                            <input type="password" name="new_password" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
                         </div>
-                        <button class="mt-2 px-4 py-2 text-sm font-medium rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-all cursor-pointer">Update Password</button>
-                    </div>
+                        <button type="submit" class="mt-2 px-4 py-2 text-sm font-medium rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-all cursor-pointer border-0">Update Password</button>
+                    </form>
                 </section>
 
             </main>
@@ -205,20 +205,7 @@ if (count($words) >= 2) {
         // Initialize Lucide Icons
         lucide.createIcons();
 
-        // 1. Dark Mode Functionality
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        
-        themeToggleBtn.addEventListener('click', function() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('color-theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('color-theme', 'dark');
-            }
-        });
-
-        // 2. Sidebar Navigation Switching Logic
+        // Sidebar Navigation Switching Logic
         const navButtons = document.querySelectorAll('.nav-btn');
         const sections = document.querySelectorAll('.settings-section');
 

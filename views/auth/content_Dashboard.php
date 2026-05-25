@@ -58,13 +58,11 @@ function timeAgo($timestamp) {
     }
 }
 ?>
-
-<section class="flex-1 h-screen overflow-y-auto p-8 space-y-8 relative transition-colors duration-300 antialiased text-slate-900 dark:text-white bg-slate-100 dark:bg-[#040814] isolate">
+<section class="flex-1 h-screen overflow-y-auto p-8 space-y-8 relative transition-colors duration-300 antialiased text-slate-900 dark:text-white bg-slate-100 dark:bg-[#0c1331] isolate">
     
-    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat -z-10 transition-all duration-300 pointer-events-none" 
-         style="background-image: url('image_dae2df.jpg');"></div>
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat -z-10 transition-all duration-300 pointer-events-none" ></div>
     
-    <div class="absolute inset-0 bg-slate-100/90 dark:bg-[#040814]/95 -z-10 transition-colors duration-300 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-slate-100/90 dark:bg-[#0c1331] -z-10 transition-colors duration-300 pointer-events-none"></div>
 
     <div class="space-y-8">
         
