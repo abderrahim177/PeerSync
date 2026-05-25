@@ -17,23 +17,8 @@ $stats        = $helpRepo->getRequestStats();
 $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PeerSync - Resolved Requests</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<section class="flex-1 p-4 sm:p-6 md:p-8 space-y-6 h-screen overflow-y-auto bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300 custom-scrollbar">
     
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
-    </script>
-</head>
-<body class="bg-slate-50 dark:bg-[#0b0f19] min-h-screen text-slate-800 dark:text-slate-100 transition-colors duration-300 antialiased p-4 sm:p-6 md:p-8">
-
     <div class="max-w-5xl mx-auto">
         
         <header class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-white/5 pb-6">
@@ -76,7 +61,7 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
             </select>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pb-8">
             <?php if (!empty($resolvedRequests)): ?>
                 <?php foreach ($resolvedRequests as $request): ?>
                     <div class="group bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/5 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition duration-200 relative overflow-hidden">
@@ -89,7 +74,7 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
                                 </div>
                                 <div>
                                     <div class="flex items-center flex-wrap gap-2 mb-1">
-                                        <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                                        <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 tracking-tight transition">
                                             <?= htmlspecialchars($request['title'] ?? 'No Title') ?>
                                         </h3>
                                         <span class="bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-300 text-xs px-2.5 py-0.5 rounded-full font-medium border border-slate-200/60 dark:border-white/5">
@@ -120,10 +105,6 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
                                 <span class="bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-semibold px-3 py-1 rounded-full border border-green-200/50 dark:border-green-500/20 flex items-center gap-1">
                                     <i class="fa-solid fa-check text-[10px]"></i> Resolved
                                 </span>
-                                <a href="?action=view&id=<?= $request['id'] ?>" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-500/10 transition">
-                                    <span>View Details</span>
-                                    <i class="fa-solid fa-angle-right text-[10px]"></i>
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -137,30 +118,4 @@ $resolvedRequests = $helpRepo->getResolvedRequests() ?: [];
         </div>
 
     </div>
-    <script>
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const darkIcon = document.getElementById('theme-toggle-dark-icon');
-        const lightIcon = document.getElementById('theme-toggle-light-icon');
-
-        // Toggle checking logic
-        if (document.documentElement.classList.contains('dark')) {
-            lightIcon.classList.remove('hidden');
-        } else {
-            darkIcon.classList.remove('hidden');
-        }
-
-        themeToggleBtn.addEventListener('click', function() {
-            darkIcon.classList.toggle('hidden');
-            lightIcon.classList.toggle('hidden');
-
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('color-theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('color-theme', 'dark');
-            }
-        });
-    </script>
-</body>
-</html>
+</section>

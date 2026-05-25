@@ -1,12 +1,22 @@
 <?php
-$name = $_SESSION['user_name'];
-$role = $_SESSION['user_role'];
+// Importation dial l-config o repository
 require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../../repositories/HelpRequestRepository.php';
+
+// Safe check ila kanti madrtich session_start() f l-fo9 dial l-project
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Guest User';
+$role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Member';
+
 $database = new Database();
 $dbConnection = $database->connect();
 $helpRepo = new HelpRequestRepository($dbConnection);
 $stats    = $helpRepo->getRequestStats();
+
+// T9wim dial l-initials mn l-ism
 $words = explode(" ", $name);
 $initials = "";
 if (count($words) >= 2) {
@@ -17,152 +27,222 @@ if (count($words) >= 2) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PeerSync - Settings</title>
+    <title>Professional Settings Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
+        // Tailwind configuration for custom dark mode targeting
         tailwind.config = {
             darkMode: 'class',
         }
     </script>
-    <style>
-        /* إخفاء السكرول بار الحركي للحفاظ على جمالية التصميم */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-50 dark:bg-[#0b132b] text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300 antialiased">
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 h-full font-sans transition-colors duration-200 flex flex-col overflow-hidden">
 
-    <main class="max-w-5xl mx-auto p-4 sm:p-6 md:p-8 space-y-6">
+    <div class="max-w-6xl w-full mx-auto px-4 py-6 md:py-8 flex flex-col h-full overflow-hidden">
         
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-[#1e295d]/50 pb-5">
+        <header class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4 mb-6 flex-shrink-0">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Account Settings</h1>
-                <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Manage your profile, security preferences, and dashboard configuration.</p>
+                <h1 class="text-3xl font-bold tracking-tight">Settings</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your account settings and preferences.</p>
             </div>
-        </div>
+        </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 flex-1 overflow-hidden min-h-0">
             
-            <div class="md:col-span-1 space-y-1">
-                <button class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/10">
-                    <i class="fa-regular fa-user w-4 text-center"></i>
-                    <span>Profile Info</span>
-                </button>
-                <button class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200">
-                    <i class="fa-solid fa-shield-halved w-4 text-center"></i>
-                    <span>Security</span>
-                </button>
-                <button class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/30 hover:text-slate-900 dark:hover:text-slate-200">
-                    <i class="fa-regular fa-bell w-4 text-center"></i>
-                    <span>Notifications</span>
-                </button>
-            </div>
+            <aside class="md:col-span-1 flex-shrink-0">
+                <nav class="space-y-1" id="settings-nav">
+                    <button data-target="account" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
+                        <i data-lucide="user" class="w-4 h-4"></i> Account
+                    </button>
+                    <button data-target="preferences" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900">
+                        <i data-lucide="globe" class="w-4 h-4"></i> Preferences & Language
+                    </button>
+                    <button data-target="notifications" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900">
+                        <i data-lucide="bell" class="w-4 h-4"></i> Notifications
+                    </button>
+                    <button data-target="security" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900">
+                        <i data-lucide="shield" class="w-4 h-4"></i> Security
+                    </button>
+                </nav>
+            </aside>
 
-            <div class="md:col-span-3 space-y-6">
+            <main class="md:col-span-3 space-y-6 md:overflow-y-auto pr-2 pb-8 h-full custom-scrollbar">
                 
-                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 shadow-sm space-y-6">
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white">Public Profile</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">This information will be visible to other students and tutors on PeerSync.</p>
-                    </div>
-
-                    <div class="flex items-center space-x-5">
-                        <div class="relative group">
-                            <div class="w-20 h-20 rounded-2xl bg-indigo-600 text-white font-extrabold text-2xl flex items-center justify-center shadow-md uppercase">
-                                <?php echo htmlspecialchars($initials); ?>
+                <section id="account" class="settings-section bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                    <h2 class="text-xl font-semibold mb-1">Profile Information</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Update your personal details and public profile.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
+                            <div class="relative group">
+                                <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                                    <?php echo htmlspecialchars($initials); ?>
+                                </div>
+                                <button class="absolute -bottom-1 -right-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1.5 rounded-lg shadow-sm hover:scale-105 transition-transform cursor-pointer">
+                                    <i data-lucide="camera" class="w-3.5 h-3.5 text-slate-600 dark:text-slate-300"></i>
+                                </button>
                             </div>
-                            <button class="absolute -bottom-1 -right-1 bg-blue-600 text-white w-7 h-7 rounded-lg flex items-center justify-center border-2 border-white dark:border-[#111936] shadow hover:bg-blue-700 transition">
-                                <i class="fa-solid fa-camera text-xs"></i>
-                            </button>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Profile Picture</p>
-                            <p class="text-xs text-slate-400 mt-0.5">PNG, JPG or GIF. Max 2MB.</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Full Name</label>
-                            <input type="text" value="Amine Benani" class="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-[#0b132b] border border-slate-200 dark:border-[#1e295d] text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition">
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email Address</label>
-                            <input type="email" value="amine.benani@example.com" class="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-[#0b132b] border border-slate-200 dark:border-[#1e295d] text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition">
-                        </div>
-                        <div class="sm:col-span-2 space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Biography / Skills Overview</label>
-                            <textarea rows="3" class="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-[#0b132b] border border-slate-200 dark:border-[#1e295d] text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition placeholder-slate-400 resize-none" placeholder="Tell us about your background or what you prefer to tutor..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-[#111936] border border-slate-200 dark:border-[#1e295d] rounded-2xl p-6 shadow-sm space-y-6">
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white">Security & Preferences</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Keep your account safe and choose your default system settings.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">New Password</label>
-                            <input type="password" placeholder="••••••••" class="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-[#0b132b] border border-slate-200 dark:border-[#1e295d] text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition">
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Confirm Password</label>
-                            <input type="password" placeholder="••••••••" class="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-[#0b132b] border border-slate-200 dark:border-[#1e295d] text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition">
-                        </div>
-                    </div>
-
-                    <div class="pt-2 space-y-4">
-                        <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Email Notifications</p>
-                                <p class="text-xs text-slate-400">Receive alerts when a tutor accepts your help request.</p>
+                                <h4 class="text-sm font-medium">Profile Photo</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Role: <span class="font-semibold text-indigo-500"><?php echo htmlspecialchars($role); ?></span></p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Full Name</label>
+                                <input type="text" value="<?php echo htmlspecialchars($name); ?>" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Email Address</label>
+                                <input type="email" value="<?php echo isset($_SESSION['user_email']) ? htmlspecialchars($_SESSION['user_email']) : ''; ?>" placeholder="your-email@example.com" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Bio</label>
+                            <textarea rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm" placeholder="Tell us a little bit about yourself..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <button class="px-4 py-2 text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer">Cancel</button>
+                        <button class="px-4 py-2 text-sm font-medium rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-500/10 transition-all cursor-pointer">Save Changes</button>
+                    </div>
+                </section>
+
+                <section id="preferences" class="settings-section hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                    <h2 class="text-xl font-semibold mb-1">Preferences & Language</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Customize your region, language, and display settings.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="max-w-md">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Interface Language</label>
+                            <div class="relative">
+                                <select class="w-full appearance-none px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm cursor-pointer">
+                                    <option value="en">🇬🇧 English (US)</option>
+                                    <option value="fr">🇫🇷 Français (FR)</option>
+                                    <option value="ar">🇲🇦 العربية (Darija / Arabic)</option>
+                                    <option value="es">🇪🇸 Español</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="max-w-md">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Timezone</label>
+                            <div class="relative">
+                                <select class="w-full appearance-none px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm cursor-pointer">
+                                    <option>(GMT+01:00) Casablanca / Morocco</option>
+                                    <option>(GMT+00:00) London / Western Europe</option>
+                                    <option>(GMT-05:00) Eastern Time (US & Canada)</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="notifications" class="settings-section hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                    <h2 class="text-xl font-semibold mb-1">Notifications</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Choose how and when you want to receive updates.</p>
+                    
+                    <div class="divide-y divide-slate-100 dark:divide-slate-800">
+                        <div class="flex items-center justify-between py-4">
+                            <div class="pr-4">
+                                <h4 class="text-sm font-medium">Email Notifications</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Receive weekly summaries, product updates, and tips.</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" checked class="sr-only peer">
-                                <div class="w-10 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                <div class="w-10 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between py-4">
+                            <div class="pr-4">
+                                <h4 class="text-sm font-medium">Security Alerts</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Get notified immediately about unusual account activities.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-10 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-indigo-600"></div>
                             </label>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="flex items-center justify-end space-x-3">
-                    <button class="px-5 py-2.5 text-xs font-semibold rounded-xl bg-white dark:bg-[#111936] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-[#1e295d] hover:bg-slate-50 transition">
-                        Cancel
-                    </button>
-                    <button class="px-5 py-2.5 text-xs font-semibold rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/10 hover:bg-blue-700 transition">
-                        Save Changes
-                    </button>
-                </div>
+                <section id="security" class="settings-section hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                    <h2 class="text-xl font-semibold mb-1">Security Settings</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Manage your password and active login sessions.</p>
+                    
+                    <div class="space-y-4 max-w-md">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Current Password</label>
+                            <input type="password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">New Password</label>
+                            <input type="password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm">
+                        </div>
+                        <button class="mt-2 px-4 py-2 text-sm font-medium rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-all cursor-pointer">Update Password</button>
+                    </div>
+                </section>
 
-            </div>
+            </main>
         </div>
-
-    </main>
+    </div>
 
     <script>
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const themeText = document.getElementById('theme-text');
-        const htmlElement = document.documentElement;
+        // Initialize Lucide Icons
+        lucide.createIcons();
 
-        themeToggleBtn.addEventListener('click', () => {
-            if (htmlElement.classList.contains('dark')) {
-                htmlElement.classList.remove('dark');
-                themeIcon.className = 'fa-solid fa-sun';
-                themeText.innerText = 'Light Mode';
+        // 1. Dark Mode Functionality
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        
+        themeToggleBtn.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
             } else {
-                htmlElement.classList.add('dark');
-                themeIcon.className = 'fa-solid fa-moon';
-                themeText.innerText = 'Dark Mode';
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
             }
+        });
+
+        // 2. Sidebar Navigation Switching Logic
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('.settings-section');
+
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-target');
+
+                // Update active state button styling
+                navButtons.forEach(b => {
+                    b.classList.remove('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-950/50', 'dark:text-indigo-400');
+                    b.classList.add('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-900');
+                });
+                btn.classList.add('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-950/50', 'dark:text-indigo-400');
+                btn.classList.remove('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-900');
+
+                // Switch visible sections smoothly
+                sections.forEach(section => {
+                    if (section.id === target) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+            });
         });
     </script>
 </body>
